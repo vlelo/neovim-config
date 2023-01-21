@@ -1,0 +1,51 @@
+local M = {}
+
+M.ft = {
+	"TelescopePrompt",
+	"neo-tree",
+	"neo-tree-popup",
+	"notify",
+	"alpha",
+	"dashboard",
+	"lazy",
+	"Starter",
+	"dap-repl",
+	"help",
+	"Trouble",
+	"terminal",
+	"dirvish",
+	"fugitive",
+	"help",
+	"peek",
+	"packer",
+	"lsp-installer",
+	"man",
+	"",
+	"noice",
+	"lspinfo",
+	"tsplayground",
+	"NeogitPopup",
+	"NeogitStatus",
+	"frecency",
+	"dapui_watches",
+	"dapui_stacks",
+	"dapui_breakpoints",
+	"dapui_scopes",
+	"daui_hover",
+	"undotree",
+	"DiffviewFiles",
+	"vimtex-toc",
+	"mason",
+	"checkhealth",
+	"prompt",
+}
+
+M.bt = {
+	"terminal",
+	"quickfix",
+	"help",
+	"prompt",
+	"nofile",
+}
+
+return M
