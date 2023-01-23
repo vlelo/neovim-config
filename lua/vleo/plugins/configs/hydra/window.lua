@@ -24,7 +24,7 @@ H({
   _q_, _<ESC>_, _;_
   ]],
 	config = {
-		invoke_on_body = true,
+		-- invoke_on_body = true,
 		timeout = false,
 		hint = {
 			type = "window",

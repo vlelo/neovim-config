@@ -368,6 +368,7 @@ return {
 	-- scrollbar
 	{
 		"petertriho/nvim-scrollbar",
+		enabled = false,
 		event = "BufReadPost",
 		dependencies = {
 			"ellisonleao/gruvbox.nvim",

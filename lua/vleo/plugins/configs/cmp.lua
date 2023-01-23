@@ -188,7 +188,7 @@ M.config = function(_, _)
 		),
 	})
 
-	require("cmp").setup.filetype({ "dap-repl", "dapui_watches", "dapui_hover" }, {
+	cmp.setup.filetype({ "dap-repl", "dapui_watches", "dapui_hover" }, {
 		sources = cmp.config.sources(
 			{ { name = "dap" } }
 		)
@@ -198,6 +198,8 @@ M.config = function(_, _)
 	vim.keymap.set("i", "<c-p>", cmp.mapping.complete(), { desc = "Previous completion item" })
 	---@diagnostic disable-next-line: missing-parameter
 	vim.keymap.set("i", "<c-n>", cmp.mapping.complete(), { desc = "Next completion item" })
+
+	Vreq("utils").allmap("<M-k>", Vreq("utils.cmp").toggle, { desc = "Toggle CMP" })
 end
 
 return M

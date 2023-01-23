@@ -176,4 +176,13 @@ return {
 			require("docs-view").setup(opts)
 		end
 	},
+
+	-- job handling
+	{
+		"stevearc/overseer.nvim",
+		cmd = { "OverseerRun", "OverseerToggle" },
+		config = function(_, _)
+			require('overseer').setup()
+		end
+	},
 }

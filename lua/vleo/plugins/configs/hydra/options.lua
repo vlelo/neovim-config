@@ -20,7 +20,8 @@ local hint = [[
   _v_ %{virtualedit}^^^^^^^ Virtual edit            _g_ %{illuminate}^^^^^^^^ Illuminate
   _e_ %{list}^^^^^^^^^^^^^^ Invisible characters    _w_ %{wrap}^^^^^^^^^^^^^^ Wrap
 	_l_ %{indent_blankline}^^ Indent blankline        _t_ %{cursorline}^^^^^^^^ Cursor line
-  _s_ %{spell}^^^^^^^^^^^^^ Spell check
+  _s_ %{spell}^^^^^^^^^^^^^ Spell check             _r_ %{colorizer}^^^^^^^^^ Colorizer
+  _k_ %{cmp}^^^^^^^^^^^^^^^ CMP
   ^ ^   ^^^^^^^^^^^^^^^^^^^                         ^ ^   ^^^^^^^^^^^^^^^^^^^                   
   _q_   ^^^^^^^^^^^^^^^^^^^                         ^ ^   ^^^^^^^^^^^^^^^^^^^          _<Esc>_
 ]]
@@ -69,7 +70,12 @@ H({
 				cursorline = vim_option("cursorline"),
 				hlsearch = vim_option("hlsearch"),
 				illuminate = function()
-					return " "
+					-- return " "
+					if require("illuminate").is_paused() then
+						return " "
+					else
+						return " "
+					end
 				end,
 				indent_blankline = function()
 					local flag = vim.g["indent_blankline_enabled"]
@@ -79,6 +85,25 @@ H({
 						return " "
 					end
 				end,
+				colorizer = function()
+					if require("colorizer").is_buffer_attached(0) then
+						return " "
+					else
+						return " "
+					end
+				end,
+				cmp = function()
+					local state = Vreq("utils.cmp").is_active()
+					if state == "not_loaded" then
+						return " "
+					else
+						if state then
+							return " "
+						else
+							return " "
+						end
+					end
+				end
 			},
 		},
 	},
@@ -156,9 +181,18 @@ H({
 		},
 		{
 			"l",
-			function() return require("indent_blankline.commands").toggle(true) end,
+			function() require("indent_blankline.commands").toggle(true) end,
+		},
+		{
+			"r",
+			"<cmd>ColorizerToggle<cr>",
+		},
+		{
+			"k",
+			Vreq("utils.cmp").toggle,
 		},
 		{ "q", nil, { exit = true } },
 		{ "<Esc>", nil, { exit = true } },
+		{ "<C-c>", nil, { desc = false, exit = true } },
 	},
 })

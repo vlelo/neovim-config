@@ -51,6 +51,25 @@ return {
 				tmux = true,
 				kitty = { enabled = false, font = "+2" },
 			},
+			window = {
+				options = {
+					signcolumn = "no",
+					cursorline = false,
+					foldcolumn = "0",
+					list = false,
+					spell = false,
+				},
+			},
+			on_open = function()
+				Vreq("utils.cmp").disable()
+				vim.cmd("LspStop")
+				vim.opt.laststatus = 0
+			end,
+			on_close = function()
+				Vreq("utils.cmp").enable()
+				vim.cmd("LspStart")
+				vim.opt.laststatus = 3
+			end,
 		},
 		keys = { { "<leader>z", "<cmd>ZenMode<cr>", desc = "Zen Mode" } },
 	},
