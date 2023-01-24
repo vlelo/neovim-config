@@ -1,25 +1,12 @@
 local H = require("hydra")
 
--- local hint = [[
---   ^ ^                  Options
---   ^
---   _n_ %{relativenumber}^^^^^^^ Relative numbers      _h_ %{hlsearch}^^^ Search highlight
---   _v_ %{virtualedit}^^^^^^^^ Virtual edit          _r_ %{colorizer}^^ Colorizer
---   _e_ %{list}^^^^^^ Invisible characters  _k_ %{cmp}^^^^^^^^ CMP
--- 	_c_ %{comments}^^ Auto comment          _l_ %{indent_bl}^^ Indent blankline
---   _s_ %{spell}^^^^^ Spell check           _t_ %{cursorline}^^^^^^^^ Cursor line
---   _w_ %{wrap}^^^^^^ Wrap                 	_g_ %{illuminate}^ Illuminate
---   ^
---   _q_    ^^^^^^^^^^                              ^^^^^^^^^          _<Esc>_
--- ]]
-
 local hint = [[
   ^ ^                     Options
   ^
   _n_ %{relativenumber}^^^^ Relative numbers        _h_ %{hlsearch}^^^^^^^^^^ Search highlight
   _v_ %{virtualedit}^^^^^^^ Virtual edit            _g_ %{illuminate}^^^^^^^^ Illuminate
   _e_ %{list}^^^^^^^^^^^^^^ Invisible characters    _w_ %{wrap}^^^^^^^^^^^^^^ Wrap
-	_l_ %{indent_blankline}^^ Indent blankline        _t_ %{cursorline}^^^^^^^^ Cursor line
+  _l_ %{indent_blankline}^^ Indent blankline        _t_ %{cursorline}^^^^^^^^ Cursor line
   _s_ %{spell}^^^^^^^^^^^^^ Spell check             _r_ %{colorizer}^^^^^^^^^ Colorizer
   _k_ %{cmp}^^^^^^^^^^^^^^^ CMP
   ^ ^   ^^^^^^^^^^^^^^^^^^^                         ^ ^   ^^^^^^^^^^^^^^^^^^^                   
@@ -70,7 +57,6 @@ H({
 				cursorline = vim_option("cursorline"),
 				hlsearch = vim_option("hlsearch"),
 				illuminate = function()
-					-- return " "
 					if require("illuminate").is_paused() then
 						return " "
 					else
