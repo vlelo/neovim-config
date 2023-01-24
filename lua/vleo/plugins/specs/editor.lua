@@ -181,8 +181,21 @@ return {
 	{
 		"stevearc/overseer.nvim",
 		cmd = { "OverseerRun", "OverseerToggle" },
-		config = function(_, _)
-			require('overseer').setup()
+		opts = {
+			templates = {
+				"builtin",
+				"user.c_compile",
+			},
+		},
+		config = function(_, opts)
+			require('overseer').setup(opts)
 		end
 	},
+
+	-- better quickfix
+	{
+		"kevinhwang91/nvim-bqf",
+		ft = "qf",
+	},
+
 }

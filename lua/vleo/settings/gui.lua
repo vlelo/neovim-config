@@ -39,5 +39,24 @@ map("n", "<D-g>", "n", { desc = "Next result" })
 map({ "i", "v", "o" }, "<D-g>", "<Esc><D-g>", { desc = "Next result", remap = true })
 map("c", "<D-g>", "<C-C><D-g>", { desc = "Next result", remap = true })
 
-vim.keymap.set("n", "<D-+>", function() Vreq("utils.gui").fontscale(1) end, { noremap = true })
-vim.keymap.set("n", "<D-->", function() Vreq("utils.gui").fontscale(-1) end, { noremap = true })
+-- vim.keymap.set("n", "<D-+>", function() Vreq("utils.gui").fontscale(1) end, { noremap = true })
+-- vim.keymap.set("n", "<D-->", function() Vreq("utils.gui").fontscale(-1) end, { noremap = true })
+
+
+map({ "n", "i", "c", "o" }, "<D-+>", "<cmd>set guifont=+<cr>", { desc = "Increase font size" })
+map("v", "<D-+>", "<Esc><D-+>gv", { desc = "Increase font size", remap = true })
+map({ "n", "i", "c", "o" }, "<D-=>", "<cmd>set guifont=+<cr>", { desc = "Increase font size" })
+map("v", "<D-=>", "<Esc><D-=>gv", { desc = "Increase font size", remap = true })
+map("n", "<C-ScrollWheelUp>", "<cmd>set guifont=+<cr>", { desc = "Increase font size" })
+
+map({ "n", "i", "c", "o" }, "<D-->", "<cmd>set guifont=-<cr>", { desc = "Decrease font size" })
+map("v", "<D-->", "<Esc><D-->gv", { desc = "Decrease font size", remap = true })
+map({ "n", "i", "c", "o" }, "<D-_>", "<cmd>set guifont=-<cr>", { desc = "Decrease font size" })
+map("v", "<D-_>", "<Esc><D-_>gv", { desc = "Decrease font size", remap = true })
+map("n", "<C-ScrollWheelDown>", "<cmd>set guifont=-<cr>", { desc = "Decrease font size" })
+
+map({ "n", "i", "c", "o" }, "<D-0>", "<cmd>set guifont=JetBrainsMono Nerd Font:h14<cr>", { desc = "Reset font size" })
+map("v", "<D-0>", "<Esc><D-0>gv", { desc = "Reset font size", remap = true })
+
+map({ "n", "i", "c", "o" }, "<A-CR>", "<cmd>FVimToggleFullScreen<cr>", { desc = "Fullscreen" })
+map("v", "<A-CR>", "<Esc><A-CR>gv", { desc = "Fullscreen", remap = true })

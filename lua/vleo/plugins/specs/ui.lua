@@ -365,36 +365,36 @@ return {
 		end,
 	},
 
-	-- scrollbar
-	{
-		"petertriho/nvim-scrollbar",
-		enabled = false,
-		event = "BufReadPost",
-		dependencies = {
-			"ellisonleao/gruvbox.nvim",
-		},
-		config = function()
-			local scrollbar = require("scrollbar")
-			-- local colors = require("tokyonight.colors").setup()
-			local colors = require("gruvbox.palette")
-			local groups = require("gruvbox.groups").setup()
-			scrollbar.setup({
-				handle = { color = colors.bg4 },
-				-- excluded_filetypes = { "prompt", "TelescopePrompt", "noice", "notify" },
-				show_in_active_only = true,
-				hide_if_all_visible = true,
-				excluded_filetypes = Vreq("utils.config.disabled").ft,
-				marks = {
-					Search = { color = groups.orange },
-					Error = { color = groups.error },
-					Warn = { color = groups.warning },
-					Info = { color = groups.info },
-					Hint = { color = groups.hint },
-					Misc = { color = groups.purple },
-				},
-			})
-		end,
-	},
+	-- -- scrollbar
+	-- {
+	-- 	"petertriho/nvim-scrollbar",
+	-- 	enabled = false,
+	-- 	event = "BufReadPost",
+	-- 	dependencies = {
+	-- 		"ellisonleao/gruvbox.nvim",
+	-- 	},
+	-- 	config = function()
+	-- 		local scrollbar = require("scrollbar")
+	-- 		-- local colors = require("tokyonight.colors").setup()
+	-- 		local colors = require("gruvbox.palette")
+	-- 		local groups = require("gruvbox.groups").setup()
+	-- 		scrollbar.setup({
+	-- 			handle = { color = colors.bg4 },
+	-- 			-- excluded_filetypes = { "prompt", "TelescopePrompt", "noice", "notify" },
+	-- 			show_in_active_only = true,
+	-- 			hide_if_all_visible = true,
+	-- 			excluded_filetypes = Vreq("utils.config.disabled").ft,
+	-- 			marks = {
+	-- 				Search = { color = groups.orange },
+	-- 				Error = { color = groups.error },
+	-- 				Warn = { color = groups.warning },
+	-- 				Info = { color = groups.info },
+	-- 				Hint = { color = groups.hint },
+	-- 				Misc = { color = groups.purple },
+	-- 			},
+	-- 		})
+	-- 	end,
+	-- },
 
 	{
 		"norcalli/nvim-terminal.lua",
@@ -419,11 +419,11 @@ return {
 		},
 	},
 
-	-- pretty fold
-	{
-		"anuvyklack/pretty-fold.nvim",
-		event = "VeryLazy",
-	},
+	-- -- pretty fold
+	-- {
+	-- 	"anuvyklack/pretty-fold.nvim",
+	-- 	event = "VeryLazy",
+	-- },
 
 	-- range command highlight
 	{
@@ -441,5 +441,66 @@ return {
 		config = function()
 			require("virt-column").setup()
 		end,
+	},
+
+	{
+		"yatli/gui-widgets.nvim",
+		event = "UiEnter",
+	},
+
+	-- better folds
+	{
+		"kevinhwang91/nvim-ufo",
+		event = "VeryLazy",
+		dependencies = {
+			"kevinhwang91/promise-async"
+		},
+		opts = function()
+			local handler = function(virtText, lnum, endLnum, width, truncate)
+				local newVirtText = {}
+				local nlines = endLnum - lnum
+				local percent_lines = math.ceil((nlines / vim.api.nvim_buf_line_count(0)) * 100)
+				local suffix = ('┤ %d : %d%% ├'):format(nlines, percent_lines) .. string.rep("─", 3)
+				local sufWidth = vim.fn.strdisplaywidth(suffix)
+
+				local targetWidth = width - sufWidth
+				local curWidth = 0
+
+				for _, chunk in ipairs(virtText) do
+					local chunkText = chunk[1]
+					local chunkWidth = vim.fn.strdisplaywidth(chunkText)
+
+					if targetWidth > curWidth + chunkWidth then
+						table.insert(newVirtText, chunk)
+					else
+						chunkText = truncate(chunkText, targetWidth - curWidth)
+						local hlGroup = chunk[2]
+						table.insert(newVirtText, { chunkText, hlGroup })
+						chunkWidth = vim.fn.strdisplaywidth(chunkText)
+						-- str width returned from truncate() may less than 2nd argument, need padding
+						if curWidth + chunkWidth < targetWidth then
+							suffix = suffix .. (' '):rep(targetWidth - curWidth - chunkWidth)
+						end
+						break
+					end
+
+					curWidth = curWidth + chunkWidth
+				end
+
+				table.insert(newVirtText, { string.rep("─", targetWidth - curWidth), "MoreMsg" })
+				table.insert(newVirtText, { suffix, "MoreMsg" })
+				return newVirtText
+			end
+			return {
+				fold_virt_text_handler = handler,
+			}
+		end,
+		config = function(_, opts)
+			require("ufo").setup(opts)
+			vim.keymap.set('n', 'zR', require('ufo').openAllFolds, { desc = "Open all folds" })
+			vim.keymap.set('n', 'zM', require('ufo').closeAllFolds, { desc = "Close all folds" })
+			vim.keymap.set('n', 'zr', require('ufo').openFoldsExceptKinds, { desc = "Open folds" })
+			vim.keymap.set('n', 'zm', require('ufo').closeFoldsWith, { desc = "Close folds" })
+		end
 	},
 }

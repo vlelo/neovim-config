@@ -185,4 +185,15 @@ return {
 			require("telescope").load_extension("workspaces")
 		end
 	},
+
+	{
+		"ziontee113/icon-picker.nvim",
+		keys = {
+			{ "<C-S-u>", "<cmd>IconPickerInsert<cr>", mode = "i", desc = "Icon Picker" },
+			{ "<C-S-u>", "<cmd>IconPickerNormal<cr>", mode = "n", desc = "Icon Picker" },
+		},
+		opts = {
+			disable_legac_commands = true,
+		}
+	},
 }

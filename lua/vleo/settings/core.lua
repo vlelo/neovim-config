@@ -76,7 +76,10 @@ opt.fileencoding = "utf-8" -- the encoding written to a file
 opt.hlsearch = true
 opt.incsearch = true
 opt.softtabstop = 2
-opt.foldlevel = 0
+opt.foldlevel = 99
+opt.foldlevelstart = 99
+opt.foldenable = true
+opt.foldcolumn = "0"
 --[[ opt.wildoptions = "pum" ]]
 opt.showcmd = true
 opt.showmatch = true -- Show matching brackets when text indicator is over them
@@ -96,6 +99,9 @@ opt.cursorline = true
 opt.equalalways = false
 opt.background = "dark"
 opt.exrc = true
+opt.fillchars:append("foldopen:")
+opt.fillchars:append("foldclose:")
+opt.fillchars:append("fold:─")
 
 -- vim.o.foldmethod = "syntax"
 -- vim.o.foldexpr = "nvim_treesitter#foldexpr()"

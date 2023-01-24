@@ -42,6 +42,16 @@ M.config = function()
 			{
 				filter = {
 					event = "msg_show",
+					-- error = true,
+					find = "Found a swap file by the name",
+				},
+				opts = {
+					stop = true,
+				}
+			},
+			{
+				filter = {
+					event = "msg_show",
 					find = "%d+L, %d+B",
 				},
 				view = "mini",

@@ -35,6 +35,7 @@ return {
 			local config = require("gruvbox").config
 
 			local NoicePopup = { fg = colors.neutral_blue, bg = colors.dark0, reverse = config.invert_signs }
+			local GruvboxAquaSign = { fg = colors.aqua, bg = colors.bg1, reverse = config.invert_signs }
 
 			return {
 				overrides = {
@@ -42,6 +43,8 @@ return {
 					NoiceCmdlinePopupBorder = NoicePopup,
 					NoiceCmdlineIcon = NoicePopup,
 					NoiceMini = groups.DiagnosticSignInfo,
+					NoiceConfirm = NoicePopup,
+					NoiceConfirmBorder = NoicePopup,
 					-- BufferLineFill = { bg = colors.dark0 },
 					TSURI = { link = "@text.uri" },
 					TSNamespace = { link = "@namespace" },
@@ -57,6 +60,11 @@ return {
 					TSOperator = { link = "@operator" },
 					TSParameter = { link = "@parameter" },
 					TreesitterContext = groups.DiagnosticSignInfo,
+					GitSignsChange = GruvboxAquaSign,
+					-- DapBreakpoint = groups.DiagnosticError,
+					-- DapLogPoint = groups.DiagnosticInfo,
+					-- DapStopped = groups.DiagnosticInfo,
+					-- DapBreakpointRejected = groups.DiagnosticHint,
 				}
 			}
 		end

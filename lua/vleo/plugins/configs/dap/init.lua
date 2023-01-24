@@ -149,13 +149,13 @@ function M.config()
 	-- 	dapui.close({})
 	-- end
 
-	vim.fn.sign_define('DapBreakpoint', { text = '', texthl = 'LspDiagnosticsSignError', linehl = '', numhl = '' })
-	vim.fn.sign_define('DapBreakpointCondition', { text = '', texthl = '', linehl = '', numhl = '' })
-	vim.fn.sign_define('DapLogPoint', { text = '', texthl = '', linehl = '', numhl = '' })
-	vim.fn.sign_define('DapStopped',
-		{ text = '', texthl = 'LspDiagnosticsSignInformation', linehl = 'DiagnosticUnderlineInfo',
-			numhl = 'LspDiagnosticsSignInformation' })
-	vim.fn.sign_define('DapBreakpointRejected', { text = '', texthl = 'LspDiagnosticsSignHint', linehl = '', numhl = '' })
+	vim.fn.sign_define("DapBreakpoint", { text = "", texthl = "DiagnosticSignError", linehl = "", numhl = "" })
+	vim.fn.sign_define("DapBreakpointCondition", { text = "", texthl = "", linehl = "", numhl = "" })
+	vim.fn.sign_define("DapLogPoint", { text = "", texthl = "DiagnosticSignInfo", linehl = "", numhl = "" })
+	vim.fn.sign_define("DapStopped",
+		{ text = "", texthl = "DiagnosticSignInfo", linehl = "DiagnosticUnderlineInfo",
+			numhl = "DiagnosticSignInfo" })
+	vim.fn.sign_define("DapBreakpointRejected", { text = "", texthl = "DiagnosticSignHint", linehl = "", numhl = "" })
 
 	local keymap_restore = {}
 	dap.listeners.after["event_initialized"]["me"] = function()

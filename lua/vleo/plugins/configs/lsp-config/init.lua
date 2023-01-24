@@ -43,6 +43,10 @@ return {
 
 			local servers = opts.ensure_installed
 			local capabilities = require("cmp_nvim_lsp").default_capabilities(vim.lsp.protocol.make_client_capabilities())
+			capabilities.textDocument.foldingRange = {
+				dynamicRegistration = false,
+				lineFoldingOnly = true
+			}
 			local serv_conf = "plugins.configs.lsp-config.servers."
 
 			require("mason-lspconfig").setup({ ensure_installed = servers })
