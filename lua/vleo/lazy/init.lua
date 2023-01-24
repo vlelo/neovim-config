@@ -40,13 +40,6 @@ require("lazy").setup(
 			url_format = "https://github.com/%s.git",
 		},
 
-		dev = {
-			-- directory where you store your local plugin projects
-			path = "~/Documents/vloding/nvim",
-			---@type string[] plugins that match these patterns will use your local versions instead of being fetched from GitHub
-			patterns = {}, -- For example {"folke"}
-		},
-
 		install = {
 			-- install missing plugins on startup. This doesn't increase startup time.
 			missing = true,
