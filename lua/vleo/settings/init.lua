@@ -3,4 +3,5 @@ Vreq("utils").load_mod("settings", {
 	"look",
 	"keys",
 	"auto",
+	"gui",
 })

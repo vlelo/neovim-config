@@ -61,6 +61,7 @@ M.keys = {
 	{ "<leader>sm", "<cmd>Telescope marks<cr>", desc = "Jump to Mark" },
 	{ "<leader>so", "<cmd>Telescope vim_options<cr>", desc = "Options" },
 	{ "<leader>st", "<cmd>Telescope builtin<cr>", desc = "Telescope" },
+	{ "<leader>su", Util.telescope("colorscheme", { enable_preview = true }), desc = "Colorscheme with preview" },
 	{
 		"<leader>sp",
 		function()

@@ -234,4 +234,16 @@ return {
 			{ '<leader>cL', ":lua require('nvim-comment-frame').add_multiline_comment()<CR>", desc = "Multiline comment frame" },
 		}
 	},
+
+	{
+		"RaafatTurki/hex.nvim",
+		cmd = {
+			"HexDump",
+			"HexAssemble",
+			"HexToggle",
+		},
+		config = function(_, _)
+			require("hex").setup()
+		end
+	},
 }
