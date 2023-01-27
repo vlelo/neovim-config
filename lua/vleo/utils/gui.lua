@@ -35,4 +35,17 @@ function M.fontscale(n)
 	vim.cmd(setcmd)
 end
 
+function M.home()
+	require("alpha").start()
+	local startpage = vim.api.nvim_get_current_buf()
+	local buffers = vim.api.nvim_list_bufs()
+	for _, buf in ipairs(buffers) do
+		if buf ~= startpage then
+			vim.api.nvim_buf_delete(buf, { force = true })
+		end
+	end
+	-- vim.cmd":bd|e#"
+	vim.fn.chdir(vim.loop.os_getenv("HOME"))
+end
+
 return M
