@@ -135,4 +135,23 @@ return {
 			})
 		end,
 	},
+
+	-- tree surfer ie swap
+	{
+		"ziontee113/syntax-tree-surfer",
+		enabled = false,
+		keys = {
+			-- Swap The Master Node relative to the cursor with it's siblings, Dot Repeatable
+			{ "]S", function() vim.opt.opfunc = "v:lua.STSSwapUpNormal_Dot" return "g@l" end, expr = true,
+				desc = "Swap next master node" },
+			{ "[S", function() vim.opt.opfunc = "v:lua.STSSwapDownNormal_Dot" return "g@l" end, expr = true,
+				desc = "Swap previous master node" },
+
+			-- Swap Current Node at the Cursor with it's siblings, Dot Repeatable
+			{ "]s", function() vim.opt.opfunc = "v:lua.STSSwapCurrentNodeNextNormal_Dot" return "g@l" end, expr = true,
+				desc = "Swap next node" },
+			{ "[s", function() vim.opt.opfunc = "v:lua.STSSwapCurrentNodePrevNormal_Dot" return "g@l" end, expr = true,
+				desc = "Swap previous node" },
+		},
+	},
 }
