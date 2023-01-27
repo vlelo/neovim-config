@@ -428,6 +428,8 @@ return {
 	-- range command highlight
 	{
 		"winston0410/range-highlight.nvim",
+		enabled = false,
+		-- causes lag
 		event = "CmdlineEnter",
 		dependencies = "winston0410/cmd-parser.nvim",
 		config = function(_, _)

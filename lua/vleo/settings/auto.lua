@@ -29,7 +29,7 @@ autocmd("FileType", {
 	pattern = {
 		"qf",
 		"help",
-		"man",
+		-- "man",
 		"notify",
 		"lspinfo",
 		"spectre_panel",

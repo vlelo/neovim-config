@@ -129,6 +129,11 @@ return {
 					return term.name
 				end
 			},
+			highlights = {
+				Normal = {
+					link = "Normal",
+				}
+			},
 		},
 		config = function(_, opts)
 			require("toggleterm").setup(opts)

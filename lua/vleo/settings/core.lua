@@ -58,10 +58,10 @@ opt.showbreak = string.rep("+", 3)
 opt.linebreak = true
 
 
-if vim.fn.has("nvim-0.9.0") == 1 then
-	opt.splitkeep = "screen"
-	opt.shortmess = "filnxtToOFWIcC"
-end
+-- if vim.fn.has("nvim-0.9.0") == 1 then
+-- 	opt.splitkeep = "screen"
+-- 	opt.shortmess = "filnxtToOFWIcC"
+-- end
 
 -- fix markdown indentation settings
 vim.g.markdown_recommended_style = 0
@@ -102,6 +102,8 @@ opt.exrc = true
 opt.fillchars:append("foldopen:")
 opt.fillchars:append("foldclose:")
 opt.fillchars:append("fold:─")
+opt.splitkeep = "screen"
+opt.shortmess:append("sWIcC")
 
 -- vim.o.foldmethod = "syntax"
 -- vim.o.foldexpr = "nvim_treesitter#foldexpr()"

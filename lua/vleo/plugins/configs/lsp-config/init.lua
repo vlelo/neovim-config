@@ -63,6 +63,7 @@ return {
 				["pyright"] = Vreq(serv_conf .. "pyright")(capabilities),
 				["sumneko_lua"] = Vreq(serv_conf .. "sumneko_lua")(capabilities),
 				["texlab"] = Vreq(serv_conf .. "texlab")(capabilities),
+				["bashls"] = Vreq(serv_conf .. "bashls")(capabilities),
 			})
 		end,
 	},
