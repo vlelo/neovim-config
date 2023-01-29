@@ -15,7 +15,7 @@ Vreq("utils.keys").wk_defer({
 		x = { "<plug>(vimtex-clean)", "Clean" },
 		X = { "<plug>(vimtex-clean-full)", "Full clean" },
 		a = { "<cmd>VimtexContextMenu<CR>", "Context menu" },
-		q = { require "vleo.plugins.configs.vimtex.qf_mode", "Toggle Quickfix mode" },
+		q = { "<cmd>VimtexQFMode<cr>", "Toggle Quickfix mode" },
 	},
 	gO = { "<plug>(vimtex-toc-toggle)", "Toggle ToC" },
 },
