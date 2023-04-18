@@ -41,13 +41,11 @@ return {
 			},
 			lualine_z = {
 				comp.location,
-				function()
-					return " " .. os.date("%R")
-				end,
+				comp.time,
 			},
 		},
 		extensions = {
-			"nvim-tree",
+			"neo-tree",
 			"quickfix",
 			"fugitive",
 			"man",

@@ -9,6 +9,9 @@ return function(capabilities)
 				completion = {
 					workspaceWord = true,
 					callSnippet = "Both",
+					keywordSnippet = "Both",
+					autoRequire = true,
+					displayContext = 8,
 				},
 				diagnostics = {
 					globals = {
@@ -43,11 +46,17 @@ return function(capabilities)
 						continuation_indent_size = "2",
 					},
 				},
+				hint = {
+					enable = true,
+				},
+				telemetry = {
+					enable = false,
+				},
 			},
 		},
 		single_file_support = true,
 	}
 
 	require("neodev").setup()
-	require("lspconfig").sumneko_lua.setup(opts)
+	require("lspconfig").lua_ls.setup(opts)
 end

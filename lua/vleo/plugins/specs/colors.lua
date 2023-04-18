@@ -29,15 +29,15 @@ return {
 	{
 		"ellisonleao/gruvbox.nvim",
 		lazy = false,
-		opts = function()
+		config = function()
 			local groups = require("gruvbox.groups").setup()
-			local colors = require("gruvbox.palette")
+			local colors = require("gruvbox.palette").get_base_colors()
 			local config = require("gruvbox").config
+			-- vim.notify(vim.inspect(colors))
 
 			local NoicePopup = { fg = colors.neutral_blue, bg = colors.dark0, reverse = config.invert_signs }
-			local GruvboxAquaSign = { fg = colors.aqua, bg = colors.bg1, reverse = config.invert_signs }
 
-			return {
+			local opts = {
 				overrides = {
 					NormalFloat = groups.Float,
 					NoiceCmdlinePopupBorder = NoicePopup,
@@ -46,6 +46,7 @@ return {
 					NoiceConfirm = NoicePopup,
 					NoiceConfirmBorder = NoicePopup,
 					-- BufferLineFill = { bg = colors.dark0 },
+
 					TSURI = { link = "@text.uri" },
 					TSNamespace = { link = "@namespace" },
 					TSType = { link = "@type" },
@@ -59,14 +60,42 @@ return {
 					TSBoolean = { link = "@boolean" },
 					TSOperator = { link = "@operator" },
 					TSParameter = { link = "@parameter" },
-					TreesitterContext = groups.DiagnosticSignInfo,
-					GitSignsChange = GruvboxAquaSign,
+					--
+					TreesitterContext = groups.CursorLine,
+					TreesitterContextLineNumber = groups.CursorLineNr,
+					--
+					-- GitSignsChange = GruvboxAquaSign,
+					-- GitSignsAdd = GruvboxGreenSign,
+					-- GitSignsDelete = GruvboxRedSign,
 					-- DapBreakpoint = groups.DiagnosticError,
 					-- DapLogPoint = groups.DiagnosticInfo,
 					-- DapStopped = groups.DiagnosticInfo,
 					-- DapBreakpointRejected = groups.DiagnosticHint,
+					BufferLineIndicatorSelected = groups.GruvboxAqua,
 				}
 			}
+
+			local signs = {
+				GruvboxAquaSign = {},
+				GruvboxGreenSign = {},
+				GruvboxRedSign = {},
+				GruvboxBlueSign = {},
+				GruvboxOrangeSign = {},
+				GruvboxPurpleSign = {},
+				GruvboxYellowSign = {},
+				SignColumn = {},
+			}
+
+			for val, color in pairs(signs) do
+				color.fg = groups[val].fg
+				color.bg = colors.bg0
+				color.reverse = groups[val].reverse
+
+				opts.overrides[val] = color
+			end
+
+			require("gruvbox").setup(opts)
+			vim.cmd("hi TreesitterContextBottom gui=underline guisp=" .. colors.yellow)
 		end
 	},
 

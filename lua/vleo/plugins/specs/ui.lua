@@ -87,7 +87,7 @@ return {
 
 	-- bufferline
 	{
-		"akinsho/nvim-bufferline.lua",
+		"akinsho/bufferline.nvim",
 		event = "VimEnter",
 		dependencies = {
 			"famiu/bufdelete.nvim",
@@ -120,8 +120,8 @@ return {
 		end,
 		opts = {
 			options = {
-				color_icons = true, -- whether or not to add the filetype icon highlights
-				show_buffer_icons = true, -- disable filetype icons for buffers
+				color_icons = true,          -- whether or not to add the filetype icon highlights
+				show_buffer_icons = true,    -- disable filetype icons for buffers
 				show_buffer_close_icons = true,
 				show_buffer_default_icon = true, -- whether or not an unrecognised filetype should show a default icon
 				show_close_icon = false,
@@ -129,12 +129,15 @@ return {
 				persist_buffer_sort = true, -- whether or not custom sorted buffers should persist
 				-- can also be a table containing 2 custom separators
 				-- [focused and unfocused]. eg: { '|', '|' }
-				separator_style = "thin", -- "slant" | "thick" | "thin" | { 'any', 'any' }
 				enforce_regular_tabs = false,
 				always_show_bufferline = true,
 				sort_by = "insert_after_current",
-				close_command = "Bdelete %d", -- can be a string | function, see "Mouse actions"
+				close_command = "Bdelete %d",   -- can be a string | function, see "Mouse actions"
 				right_mouse_command = "Bdelete %d", -- can be a string | function, see "Mouse actions"
+				indicator = {
+					icon = '▎',
+					style = 'icon',
+				},
 				diagnostics = "nvim_lsp",
 				diagnostics_indicator = function(_, _, diag)
 					local icons = Vreq("utils.config.icons").diagnostics
@@ -227,9 +230,14 @@ return {
 
 	{
 		"luukvbaal/statuscol.nvim",
-		enabled = false,
+		-- enabled = false,
 		event = "VeryLazy",
-		config = true,
+		init = function()
+			require("statuscol").setup({
+				ft_ignore = Vreq("utils.config.disabled").ft,
+				bt_ignore = Vreq("utils.config.disabled").bt,
+			})
+		end
 	},
 
 	-- better vim.notify
@@ -264,7 +272,7 @@ return {
 	{
 		"goolord/alpha-nvim",
 		dependencies = {
-			"akinsho/nvim-bufferline.lua",
+			"akinsho/bufferline.nvim",
 		},
 		event = "VimEnter",
 		opts = function()
@@ -296,18 +304,22 @@ return {
 			dashboard.section.buttons.val = {
 				make_padding(1),
 				make_group({
-					dashboard.button("n", " " .. " New file", ":ene<CR>"),
-					dashboard.button("f", " " .. " Find file", ":Telescope find_files <CR>"),
-					dashboard.button("r", " " .. " Recent files", ":Telescope oldfiles <CR>"),
-					dashboard.button("g", " " .. " Find text", ":Telescope live_grep <CR>"),
+					dashboard.button("n", " " .. " New file", "<cmd>ene<CR>"),
+					dashboard.button("f", " " .. " Find file", "<cmd>Telescope find_files <CR>"),
+					dashboard.button("r", " " .. " Recent files", "<cmd>Telescope oldfiles <CR>"),
+					dashboard.button("g", " " .. " Find text", "<cmd>Telescope live_grep <CR>"),
 					dashboard.button("p", " " .. " Find project",
 						":Lazy load workspaces.nvim | Telescope workspaces <CR>"),
-					dashboard.button("b", " " .. " Restore Session", [[:lua require("persistence").load() <cr>]]),
+					dashboard.button("b", " " .. " Restore Session", [[<cmd>lua require("persistence").load() <cr>]]),
 				}),
 				make_group({
-					dashboard.button("s", " " .. " Config", ":e $MYVIMRC | cd %:p:h<CR>"),
-					dashboard.button("l", "痢" .. " Lazy", ":Lazy<CR>"),
-					dashboard.button("q", " " .. " Quit", ":qa<CR>"),
+					dashboard.button("d", " " .. " Neorg", "<cmd>Neorg index<cr>"),
+				}),
+				make_group({
+					dashboard.button("s", " " .. " Config", "<cmd>e $MYVIMRC | cd %:p:h<CR>"),
+					-- dashboard.button("l", "痢" .. " Lazy", "<cmd>Lazy<CR>"),
+					dashboard.button("l", " " .. " Lazy", "<cmd>Lazy<CR>"),
+					dashboard.button("q", " " .. " Quit", "<cmd>qa<CR>"),
 				}),
 				make_padding(1),
 			}
@@ -396,9 +408,18 @@ return {
 	-- 	end,
 	-- },
 
+	-- {
+	-- 	"norcalli/nvim-terminal.lua",
+	-- 	event = "VeryLazy",
+	-- },
 	{
-		"norcalli/nvim-terminal.lua",
+		"m00qek/baleia.nvim",
 		event = "VeryLazy",
+		config = function()
+			local baleia = require("baleia").setup()
+			vim.api.nvim_create_user_command("Baleia", function() baleia.once(0) end,
+				{ desc = "Colorize ansi scnacodes" })
+		end
 	},
 
 	-- references

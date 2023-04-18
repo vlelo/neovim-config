@@ -32,6 +32,9 @@ return {
 		opts = {
 			filesystem = {
 				follow_current_file = true,
+				filtered_items = {
+					hide_gitignored = false,
+				},
 			},
 			window = {
 				width = 30,
@@ -41,6 +44,8 @@ return {
 					["s"] = "vsplit_with_window_picker",
 					["t"] = "open_tabnew",
 					["Z"] = "expand_all_nodes",
+					["/"] = "noop",
+					["<c-f>"] = "fuzzy_finder",
 				}
 			},
 		},

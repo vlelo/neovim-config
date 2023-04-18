@@ -33,7 +33,9 @@ return {
 				pattern = {
 					"DiffviewFiles",
 				},
-				command = "DiffviewClose",
+				callback = function()
+					vim.keymap.set("n", "q", "<cmd>DiffviewClose<CR>", { buffer = true })
+				end,
 			})
 		end,
 		keys = { { "<leader>gd", "<cmd>DiffviewOpen<cr>", desc = "DiffView" } },
@@ -43,6 +45,7 @@ return {
 		"nvim-neorg/neorg",
 		dependencies = { { "nvim-lua/plenary.nvim" } },
 		build = ":Neorg sync-parsers",
+		cmd = { "Neorg" },
 		ft = "norg",
 		opts = {
 			load = {
@@ -61,7 +64,8 @@ return {
 						autochdir = true, -- Automatically change the directory to the current workspace's root every time
 						index = "index.norg", -- The name of the main (root) .norg file
 						default_workspace = "main",
-						last_workspace = vim.fn.stdpath("cache") .. "/neorg_last_workspace.txt" -- The location to write and read the workspace cache file
+						last_workspace = vim.fn.stdpath("cache") ..
+								"/neorg_last_workspace.txt" -- The location to write and read the workspace cache file
 					}
 				},
 			},
@@ -76,14 +80,14 @@ return {
 			filetypes = { "*", "!lazy" },
 			buftype = { "*", "!prompt", "!nofile" },
 			user_default_options = {
-				RGB = true, -- #RGB hex codes
+				RGB = true,   -- #RGB hex codes
 				RRGGBB = true, -- #RRGGBB hex codes
 				names = false, -- "Name" codes like Blue
 				RRGGBBAA = true, -- #RRGGBBAA hex codes
 				AARRGGBB = false, -- 0xAARRGGBB hex codes
 				rgb_fn = true, -- CSS rgb() and rgba() functions
 				hsl_fn = true, -- CSS hsl() and hsla() functions
-				css = false, -- Enable all CSS features: rgb_fn, hsl_fn, names, RGB, RRGGBB
+				css = false,  -- Enable all CSS features: rgb_fn, hsl_fn, names, RGB, RRGGBB
 				css_fn = true, -- Enable all CSS *functions*: rgb_fn, hsl_fn
 				-- Available modes: foreground, background
 				-- Available modes for `mode`: foreground, background,  virtualtext
@@ -98,14 +102,22 @@ return {
 		"akinsho/toggleterm.nvim",
 		cmd = "ToggleTerm",
 		keys = {
-			{ "<c-\\>", '<cmd>execute v:count1 . "ToggleTerm direction=float"<cr>', desc = "Floating terminal",
-				mode = { "n", "i" } },
-			{ "<leader>tf", '<cmd>execute v:count1 . "ToggleTerm direction=float"<cr>', desc = "Floating" },
-			{ "<leader>tv", '<cmd>execute v:count1 . "ToggleTerm direction=vertical"<cr>', desc = "Vertical" },
+			{
+				"<c-\\>",
+				'<cmd>execute v:count1 . "ToggleTerm direction=float"<cr>',
+				desc = "Floating terminal",
+				mode = { "n", "i" }
+			},
+			{ "<leader>tf", '<cmd>execute v:count1 . "ToggleTerm direction=float"<cr>',      desc = "Floating" },
+			{ "<leader>tv", '<cmd>execute v:count1 . "ToggleTerm direction=vertical"<cr>',   desc = "Vertical" },
 			{ "<leader>th", '<cmd>execute v:count1 . "ToggleTerm direction=horizontal"<cr>', desc = "Horizontal" },
-			{ "<leader>tt", '<cmd>execute v:count1 . "ToggleTerm direction=tab"<cr>', desc = "Tab" },
-			{ "<C-]>", '<cmd>execute v:count1 . "ToggleTerm direction=horizontal"<cr>', desc = "Horizontal terminal",
-				mode = { "n", "i" } },
+			{ "<leader>tt", '<cmd>execute v:count1 . "ToggleTerm direction=tab"<cr>',        desc = "Tab" },
+			{
+				"<C-]>",
+				'<cmd>execute v:count1 . "ToggleTerm direction=horizontal"<cr>',
+				desc = "Horizontal terminal",
+				mode = { "n", "i" }
+			},
 		},
 		opts = {
 			size = function(term)
@@ -141,7 +153,8 @@ return {
 				pattern = "term://*toggleterm#*",
 				callback = function(event)
 					vim.keymap.set("t", "<c-\\>", '<Cmd>exe v:count1 . "ToggleTerm direction=float"<CR>', { buffer = event.buf })
-					vim.keymap.set("t", "<c-]>", '<Cmd>exe v:count1 . "ToggleTerm direction=horizontal"<CR>', { buffer = event.buf })
+					vim.keymap.set("t", "<c-]>", '<Cmd>exe v:count1 . "ToggleTerm direction=horizontal"<CR>',
+						{ buffer = event.buf })
 				end,
 				desc = "Attach toggleterm bindings to toggleterm buffers",
 				group = vim.api.nvim_create_augroup("ToggleTermKeys", { clear = true })
@@ -161,10 +174,10 @@ return {
 	{
 		"hkupty/iron.nvim",
 		keys = {
-			{ "<leader>rs", "<cmd>IronRepl<cr>", desc = "Start Repl" },
-			{ "<space>rw", "<cmd>IronRestart<cr>", desc = "Restart Repl" },
-			{ "<space>rr", "<cmd>IronFocus<cr>", desc = "Focus Repl" },
-			{ "<space>rh", "<cmd>IronHide<cr>", desc = "Hide Repl" },
+			{ "<leader>rs", "<cmd>IronRepl<cr>",    desc = "Start Repl" },
+			{ "<space>rw",  "<cmd>IronRestart<cr>", desc = "Restart Repl" },
+			{ "<space>rr",  "<cmd>IronFocus<cr>",   desc = "Focus Repl" },
+			{ "<space>rh",  "<cmd>IronHide<cr>",    desc = "Hide Repl" },
 		},
 		config = function(_, _)
 			require("iron.core").setup({
@@ -200,7 +213,6 @@ return {
 					exit = "<leader>rq",
 					clear = "<leader>ro",
 				},
-
 			})
 
 			Vreq("utils.keys").wk_defer({
@@ -220,9 +232,9 @@ return {
 				},
 			})
 			Vreq("utils.keys").wk_defer({
-				["<leader>rv"] = { "Send to Iron" },
-				["<leader>rc"] = { "Mark" },
-			},
+					["<leader>rv"] = { "Send to Iron" },
+					["<leader>rc"] = { "Mark" },
+				},
 				{
 					mode = "v",
 				})
@@ -235,7 +247,7 @@ return {
 			"nvim-treesitter/nvim-treesitter",
 		},
 		keys = {
-			{ '<leader>cl', ":lua require('nvim-comment-frame').add_comment()<CR>", desc = "Comment frame" },
+			{ '<leader>cl', ":lua require('nvim-comment-frame').add_comment()<CR>",           desc = "Comment frame" },
 			{ '<leader>cL', ":lua require('nvim-comment-frame').add_multiline_comment()<CR>", desc = "Multiline comment frame" },
 		}
 	},
@@ -251,4 +263,13 @@ return {
 			require("hex").setup()
 		end
 	},
+
+	-- {
+	-- 	"Wansmer/langmapper.nvim",
+	-- 	lazy = false,
+	-- 	priority = 1,
+	-- 	config = function()
+	-- 		require("langmapper").setup({--[[ your config ]]})
+	-- 	end,
+	-- },
 }

@@ -2,7 +2,7 @@
 local q = require("vim.treesitter.query")
 local bufnr = 0
 
-local query = vim.treesitter.parse_query("lua", [[
+local query = vim.treesitter.query.parse("lua", [[
 (table_constructor
 	(field) @campo
 )
@@ -31,7 +31,8 @@ local function comma()
 			local new_cursor = vim.api.nvim_win_get_cursor(0)
 			-- if EOF
 			if pos[2] ~= new_cursor[2] then
-				vim.api.nvim_buf_set_text(bufnr, new_cursor[1] - 1, new_cursor[2] + 1, new_cursor[1] - 1, new_cursor[2] + 1, { ',' })
+				vim.api.nvim_buf_set_text(bufnr, new_cursor[1] - 1, new_cursor[2] + 1, new_cursor[1] - 1, new_cursor[2] + 1,
+					{ ',' })
 			else
 				local char = vim.api.nvim_get_current_line():sub(new_cursor[2] + 1, new_cursor[2] + 1)
 				if char ~= ',' then

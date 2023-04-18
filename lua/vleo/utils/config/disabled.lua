@@ -38,6 +38,7 @@ M.ft = {
 	"mason",
 	"checkhealth",
 	"prompt",
+	"OverseerForm",
 }
 
 M.bt = {

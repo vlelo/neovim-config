@@ -5,6 +5,8 @@ local M = {
 		"hrsh7th/cmp-nvim-lsp",
 		"hrsh7th/cmp-buffer",
 		"hrsh7th/cmp-path",
+		"hrsh7th/cmp-omni",
+		"kdheepak/cmp-latex-symbols",
 		{
 			"tzachar/cmp-fuzzy-path",
 			dependencies = { "tzachar/fuzzy.nvim" },
@@ -57,14 +59,13 @@ M.config = function(_, _)
 				c = cmp.mapping.close(),
 			},
 			["<C-e>"] = cmp.mapping.abort(),
-
 			["<CR>"] = cmp.mapping.confirm({ select = true }),
 			--[[ ["<CR>"] = cmp.mapping.confirm { ]]
-			--[[	behavior = cmp.ConfirmBehavior.Replace, ]]
+			--[[	behavior = cmp.ConfirmBehavior.Insert, ]]
 			--[[	select = false ]]
 			--[[ }, ]]
 			["<C-k>"] = cmp.mapping.confirm {
-				behavior = cmp.ConfirmBehavior.Replace,
+				behavior = cmp.ConfirmBehavior.Insert,
 				select = true
 			},
 			["<C-p>"] = cmp.mapping.select_prev_item(),
@@ -76,24 +77,33 @@ M.config = function(_, _)
 				{ name = "luasnip" },
 			},
 			{
-				-- { name = "path" },
-				{ name = 'fuzzy_path' },
+				{ name = "path" },
+				-- { name = 'fuzzy_path' },
 				{ name = "buffer" },
 				-- { name = 'fuzzy_buffer' },
 			},
 			{ { name = "git" } },
-			{ {
-				name = "spell",
-				option = {
-					keep_all_entries = false,
-					enable_in_context = function()
-						return require('cmp.config.context').in_treesitter_capture('spell')
-					end,
-					is_available = function()
-						return require('cmp.config.context').in_treesitter_capture('spell')
-					end,
+			{
+				{
+					name = "spell",
+					option = {
+						keep_all_entries = false,
+						enable_in_context = function()
+							return require('cmp.config.context').in_treesitter_capture('spell')
+						end,
+						is_available = function()
+							return require('cmp.config.context').in_treesitter_capture('spell')
+						end,
+					},
+				}
+			},
+			{
+				{
+					name = "latex_symbols",
+					filetype = { "tex", "latex" },
+					option = { cache = true }, -- avoids reloading each time
 				},
-			} }
+			}
 		),
 		formatting = {
 			format = function(_, item)
@@ -152,7 +162,7 @@ M.config = function(_, _)
 			["<C-k>"] = {
 				c = function()
 					cmp.confirm({
-						behavior = cmp.ConfirmBehavior.Replace,
+						behavior = cmp.ConfirmBehavior.Insert,
 						select = true
 					})
 					cmp.complete()
@@ -160,12 +170,12 @@ M.config = function(_, _)
 			}
 		}),
 		confirm_opts = {
-			behavior = cmp.ConfirmBehavior.Replace,
+			behavior = cmp.ConfirmBehavior.Insert,
 			select = true,
 		},
 		sources = cmp.config.sources(
-		-- { { name = "path" } },
-			{ { name = 'fuzzy_path' } },
+			{ { name = "path" } },
+			-- { { name = 'fuzzy_path' } },
 			{ { name = "cmdline" } }
 		)
 	})
@@ -186,6 +196,12 @@ M.config = function(_, _)
 			{ { name = "buffer" } }
 		-- { { name = 'fuzzy_buffer' } }
 		),
+	})
+
+	cmp.setup.filetype("query", {
+		sources = cmp.config.sources(
+			{ { name = "omni" } }
+		)
 	})
 
 	cmp.setup.filetype({ "dap-repl", "dapui_watches", "dapui_hover" }, {

@@ -3,8 +3,8 @@ return {
 		"neovim/nvim-lspconfig",
 		event = "BufReadPre",
 		dependencies = {
-			{ "folke/neoconf.nvim", cmd = "Neoconf", config = true },
-			{ "folke/neodev.nvim", opts = { experimental = { pathStrict = true } } },
+			{ "folke/neoconf.nvim", cmd = "Neoconf",                                config = true },
+			{ "folke/neodev.nvim",  opts = { experimental = { pathStrict = true } } },
 			"williamboman/mason.nvim",
 			"williamboman/mason-lspconfig.nvim",
 			"hrsh7th/cmp-nvim-lsp",
@@ -13,7 +13,7 @@ return {
 		opts = {
 			ensure_installed = {
 				"clangd",
-				"sumneko_lua",
+				"lua_ls",
 			},
 		},
 		---@param opts PluginLspOpts
@@ -59,10 +59,10 @@ return {
 				["arduino_language_server"] = Vreq(serv_conf .. "arduino_language_server")(capabilities),
 				["clangd"] = Vreq(serv_conf .. "clangd")(capabilities),
 				["jsonls"] = Vreq(serv_conf .. "jsonls")(capabilities),
-				--[[ ["ltex"] = Vreq(serv_conf .. "ltex")(capabilities), ]]
+				-- ["ltex"] = Vreq(serv_conf .. "ltex")(capabilities),
 				["pyright"] = Vreq(serv_conf .. "pyright")(capabilities),
-				["sumneko_lua"] = Vreq(serv_conf .. "sumneko_lua")(capabilities),
-				["texlab"] = Vreq(serv_conf .. "texlab")(capabilities),
+				["lua_ls"] = Vreq(serv_conf .. "lua_ls")(capabilities),
+				-- ["texlab"] = Vreq(serv_conf .. "texlab")(capabilities),
 				-- ["bashls"] = Vreq(serv_conf .. "bashls")(capabilities),
 			})
 		end,

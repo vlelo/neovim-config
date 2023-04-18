@@ -23,13 +23,18 @@ return {
 	{
 		"nvim-treesitter/nvim-treesitter-context",
 		event = "BufReadPre",
-		config = true,
+		config = function()
+			require("treesitter-context").setup({
+				line_numbers = true,
+			})
+		end,
 	},
 
 	{
 		"nvim-treesitter/nvim-treesitter",
 		dependencies = {
 			"JoosepAlviste/nvim-ts-context-commentstring",
+			"mrjones2014/nvim-ts-rainbow",
 		},
 		build = ":TSUpdate",
 		event = "BufReadPost",
@@ -106,7 +111,7 @@ return {
 				playground = {
 					enable = true,
 					disable = {},
-					updatetime = 25, -- Debounced time for highlighting nodes in the playground from source code
+					updatetime = 25,   -- Debounced time for highlighting nodes in the playground from source code
 					persist_queries = true, -- Whether the query persists across vim sessions
 					keybindings = {
 						toggle_query_editor = "o",
@@ -132,6 +137,10 @@ return {
 						enable = false,
 					},
 				},
+				rainbow = {
+					enable = true,
+					extended_mode = true,
+				}
 			})
 		end,
 	},
@@ -142,16 +151,44 @@ return {
 		enabled = false,
 		keys = {
 			-- Swap The Master Node relative to the cursor with it's siblings, Dot Repeatable
-			{ "]S", function() vim.opt.opfunc = "v:lua.STSSwapUpNormal_Dot" return "g@l" end, expr = true,
-				desc = "Swap next master node" },
-			{ "[S", function() vim.opt.opfunc = "v:lua.STSSwapDownNormal_Dot" return "g@l" end, expr = true,
-				desc = "Swap previous master node" },
+			{
+				"]S",
+				function()
+					vim.opt.opfunc = "v:lua.STSSwapUpNormal_Dot"
+					return "g@l"
+				end,
+				expr = true,
+				desc = "Swap next master node"
+			},
+			{
+				"[S",
+				function()
+					vim.opt.opfunc = "v:lua.STSSwapDownNormal_Dot"
+					return "g@l"
+				end,
+				expr = true,
+				desc = "Swap previous master node"
+			},
 
 			-- Swap Current Node at the Cursor with it's siblings, Dot Repeatable
-			{ "]s", function() vim.opt.opfunc = "v:lua.STSSwapCurrentNodeNextNormal_Dot" return "g@l" end, expr = true,
-				desc = "Swap next node" },
-			{ "[s", function() vim.opt.opfunc = "v:lua.STSSwapCurrentNodePrevNormal_Dot" return "g@l" end, expr = true,
-				desc = "Swap previous node" },
+			{
+				"]s",
+				function()
+					vim.opt.opfunc = "v:lua.STSSwapCurrentNodeNextNormal_Dot"
+					return "g@l"
+				end,
+				expr = true,
+				desc = "Swap next node"
+			},
+			{
+				"[s",
+				function()
+					vim.opt.opfunc = "v:lua.STSSwapCurrentNodePrevNormal_Dot"
+					return "g@l"
+				end,
+				expr = true,
+				desc = "Swap previous node"
+			},
 		},
 	},
 }

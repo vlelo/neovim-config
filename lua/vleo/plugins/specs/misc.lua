@@ -196,4 +196,8 @@ return {
 			disable_legac_commands = true,
 		}
 	},
+
+	{
+		dir = "/Users/vleo/Documents/vloding/texview.nvim",
+	},
 }

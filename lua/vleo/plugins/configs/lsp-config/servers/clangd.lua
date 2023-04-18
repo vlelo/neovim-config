@@ -43,7 +43,6 @@ local extensions = {
 			statement = "",
 			["template argument"] = "",
 		},
-
 		kind_icons = {
 			Compound = "ﴯ",
 			Recovery = "",
@@ -53,7 +52,6 @@ local extensions = {
 			TemplateTemplateParm = "",
 			TemplateParamObject = "",
 		},
-
 		highlights = {
 			detail = "Comment",
 		},
@@ -69,9 +67,18 @@ local extensions = {
 return function(capabilities)
 	local opts = {}
 	opts.capabilities = capabilities
+	opts.capabilities.offsetEncoding = "utf-8"
+	opts.cmd = {
+		"clangd",
+		"-Wno-unknown-warning-option",
+		"--enable-config",
+		-- NOTE only for sage
+		"--header-insertion=never",
+	}
+
 
 	-- Have to call special function to run clangd
-	require("clangd_extensions").setup{
+	require("clangd_extensions").setup {
 		server = opts,
 		extensions = extensions,
 	}

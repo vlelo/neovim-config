@@ -5,7 +5,12 @@ return {
 		build = "make install_jsregexp",
 		dependencies = {
 			{
+				enable = false,
 				"rafamadriz/friendly-snippets",
+				build = {
+					"[ -e snippets/latex.json ] && rm snippets/latex.json",
+					"[ -e snippets/latex ] && rm -r snippets/latex"
+				},
 				config = function()
 					require("luasnip.loaders.from_vscode").lazy_load()
 				end,
@@ -38,7 +43,7 @@ return {
 			-- },
 			-- { "<tab>", function() require("luasnip").jump(1) end, mode = "s" },
 			-- { "<s-tab>", function() require("luasnip").jump(-1) end, mode = { "i", "s" } },
-			{ "<c-x>", function() require("luasnip").jump(1) end, mode = { "i", "s" } },
+			{ "<c-x>", function() require("luasnip").jump(1) end,  mode = { "i", "s" } },
 			{ "<c-z>", function() require("luasnip").jump(-1) end, mode = { "i", "s" } },
 		},
 	},
@@ -169,7 +174,8 @@ return {
 		},
 		config = function(_, opts)
 			require("ssr").setup(opts)
-			vim.keymap.set({ "n", "x" }, "gsr", function() require("ssr").open() end, { desc = "Structural search and replace" })
+			vim.keymap.set({ "n", "x" }, "gsr", function() require("ssr").open() end,
+				{ desc = "Structural search and replace" })
 		end
 	},
 
@@ -205,7 +211,7 @@ return {
 				custom_textobjects = {
 					o = ai.gen_spec.treesitter({
 						a = { "@block.outer", "@conditional.outer", "@loop.outer" },
-						i = { "@block.inner", "@conditional.inner", "@loop.inner" } --[[  ]] ,
+						i = { "@block.inner", "@conditional.inner", "@loop.inner" } --[[  ]],
 					}, {}),
 					f = ai.gen_spec.treesitter({ a = "@function.outer", i = "@function.inner" }, {}),
 					c = ai.gen_spec.treesitter({ a = "@class.outer", i = "@class.inner" }, {}),
