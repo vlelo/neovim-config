@@ -3,8 +3,8 @@ return {
 		"neovim/nvim-lspconfig",
 		event = "BufReadPre",
 		dependencies = {
-			{ "folke/neoconf.nvim", cmd = "Neoconf",                                config = true },
-			{ "folke/neodev.nvim",  opts = { experimental = { pathStrict = true } } },
+			{ "folke/neoconf.nvim", cmd = "Neoconf", config = true },
+			{ "folke/neodev.nvim", opts = { experimental = { pathStrict = true } } },
 			"williamboman/mason.nvim",
 			"williamboman/mason-lspconfig.nvim",
 			"hrsh7th/cmp-nvim-lsp",
@@ -42,10 +42,11 @@ return {
 			})
 
 			local servers = opts.ensure_installed
-			local capabilities = require("cmp_nvim_lsp").default_capabilities(vim.lsp.protocol.make_client_capabilities())
+			local capabilities =
+				require("cmp_nvim_lsp").default_capabilities(vim.lsp.protocol.make_client_capabilities())
 			capabilities.textDocument.foldingRange = {
 				dynamicRegistration = false,
-				lineFoldingOnly = true
+				lineFoldingOnly = true,
 			}
 			local serv_conf = "plugins.configs.lsp-config.servers."
 
@@ -57,12 +58,17 @@ return {
 					require("lspconfig")[server_name].setup(server_opts)
 				end,
 				["arduino_language_server"] = Vreq(serv_conf .. "arduino_language_server")(capabilities),
+
 				["clangd"] = Vreq(serv_conf .. "clangd")(capabilities),
+				-- ["clangd"] = function()
+				-- end,
+				-- ["ccls"] = Vreq(serv_conf .. "ccls")(capabilities),
+
 				["jsonls"] = Vreq(serv_conf .. "jsonls")(capabilities),
 				-- ["ltex"] = Vreq(serv_conf .. "ltex")(capabilities),
 				["pyright"] = Vreq(serv_conf .. "pyright")(capabilities),
 				["lua_ls"] = Vreq(serv_conf .. "lua_ls")(capabilities),
-				-- ["texlab"] = Vreq(serv_conf .. "texlab")(capabilities),
+				["texlab"] = Vreq(serv_conf .. "texlab")(capabilities),
 				-- ["bashls"] = Vreq(serv_conf .. "bashls")(capabilities),
 			})
 		end,

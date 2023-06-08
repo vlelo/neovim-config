@@ -9,7 +9,8 @@ return {
 				"rafamadriz/friendly-snippets",
 				build = {
 					"[ -e snippets/latex.json ] && rm snippets/latex.json",
-					"[ -e snippets/latex ] && rm -r snippets/latex"
+					"[ -e snippets/latex ] && rm -r snippets/latex",
+					"[ -e snippets/global.json ] && rm snippets/global.json",
 				},
 				config = function()
 					require("luasnip.loaders.from_vscode").lazy_load()
@@ -64,16 +65,16 @@ return {
 		},
 		config = function(_, opts)
 			local npairs = require("nvim-autopairs")
-			local Rule = require('nvim-autopairs.rule')
-			local cmp_autopairs = require('nvim-autopairs.completion.cmp')
+			local Rule = require("nvim-autopairs.rule")
+			local cmp_autopairs = require("nvim-autopairs.completion.cmp")
 			local cmp = require("cmp")
-			local cond = require 'nvim-autopairs.conds'
+			local cond = require("nvim-autopairs.conds")
 
 			npairs.setup(opts)
 
 			-- If you want insert `(` after select function or method item
 			cmp.event:on(
-				'confirm_done',
+				"confirm_done",
 				cmp_autopairs.on_confirm_done({
 					filetypes = {
 						tex = false,
@@ -84,36 +85,38 @@ return {
 			npairs.add_rule(Rule("$", "$", "tex"))
 			npairs.add_rule(Rule("/*", "*/", "c"))
 
-			local brackets = { { '(', ')' }, { '[', ']' }, { '{', '}' }, { "/*", "*/" }, { "$", "$" } }
+			local brackets = { { "(", ")" }, { "[", "]" }, { "{", "}" }, { "/*", "*/" }, { "$", "$" } }
 			npairs.add_rules({
-				Rule(' ', ' ')
-						:with_pair(function(opt)
-							local pair = opt.line:sub(opt.col - 1, opt.col)
-							return vim.tbl_contains({
-								brackets[1][1] .. brackets[1][2],
-								brackets[2][1] .. brackets[2][2],
-								brackets[3][1] .. brackets[3][2]
-							}, pair)
-						end)
-						:with_move(cond.none())
-						:with_cr(cond.none())
-						:with_del(function(opt)
-							local col = vim.api.nvim_win_get_cursor(0)[2]
-							local context = opt.line:sub(col - 1, col + 2)
-							return vim.tbl_contains({
-								brackets[1][1] .. '  ' .. brackets[1][2],
-								brackets[2][1] .. '  ' .. brackets[2][2],
-								brackets[3][1] .. '  ' .. brackets[3][2]
-							}, context)
-						end)
+				Rule(" ", " ")
+					:with_pair(function(opt)
+						local pair = opt.line:sub(opt.col - 1, opt.col)
+						return vim.tbl_contains({
+							brackets[1][1] .. brackets[1][2],
+							brackets[2][1] .. brackets[2][2],
+							brackets[3][1] .. brackets[3][2],
+						}, pair)
+					end)
+					:with_move(cond.none())
+					:with_cr(cond.none())
+					:with_del(function(opt)
+						local col = vim.api.nvim_win_get_cursor(0)[2]
+						local context = opt.line:sub(col - 1, col + 2)
+						return vim.tbl_contains({
+							brackets[1][1] .. "  " .. brackets[1][2],
+							brackets[2][1] .. "  " .. brackets[2][2],
+							brackets[3][1] .. "  " .. brackets[3][2],
+						}, context)
+					end),
 			})
 			for _, bracket in pairs(brackets) do
-				Rule('', ' ' .. bracket[2])
-						:with_pair(cond.none())
-						:with_move(function(opt) return opt.char == bracket[2] end)
-						:with_cr(cond.none())
-						:with_del(cond.none())
-						:use_key(bracket[2])
+				Rule("", " " .. bracket[2])
+					:with_pair(cond.none())
+					:with_move(function(opt)
+						return opt.char == bracket[2]
+					end)
+					:with_cr(cond.none())
+					:with_del(cond.none())
+					:use_key(bracket[2])
 			end
 		end,
 	},
@@ -139,7 +142,25 @@ return {
 
 	{
 		"folke/todo-comments.nvim",
-		event = "VeryLazy"
+		event = "VeryLazy",
+		config = function()
+			require("todo-comments").setup({
+				keywords = {
+					FIX = {
+						icon = " ", -- icon used for the sign, and in search results
+						color = "error", -- can be a hex color, or a named color (see below)
+						alt = { "FIXME", "BUG", "FIXIT", "ISSUE" }, -- a set of other keywords that all map to this FIX keywords
+						-- signs = false, -- configure signs for some keywords individually
+					},
+					TODO = { icon = " ", color = "info" },
+					HACK = { icon = " ", color = "warning" },
+					WARN = { icon = " ", color = "warning", alt = { "WARNING", "XXX" } },
+					PERF = { icon = " ", alt = { "OPTIM", "PERFORMANCE", "OPTIMIZE" } },
+					NOTE = { icon = " ", color = "hint", alt = { "INFO" } },
+					TEST = { icon = "⏲ ", color = "test", alt = { "TESTING", "PASSED", "FAILED" } },
+				},
+			})
+		end,
 	},
 
 	{
@@ -174,9 +195,10 @@ return {
 		},
 		config = function(_, opts)
 			require("ssr").setup(opts)
-			vim.keymap.set({ "n", "x" }, "gsr", function() require("ssr").open() end,
-				{ desc = "Structural search and replace" })
-		end
+			vim.keymap.set({ "n", "x" }, "gsr", function()
+				require("ssr").open()
+			end, { desc = "Structural search and replace" })
+		end,
 	},
 
 	-- split join
@@ -211,7 +233,7 @@ return {
 				custom_textobjects = {
 					o = ai.gen_spec.treesitter({
 						a = { "@block.outer", "@conditional.outer", "@loop.outer" },
-						i = { "@block.inner", "@conditional.inner", "@loop.inner" } --[[  ]],
+						i = { "@block.inner", "@conditional.inner", "@loop.inner" },--[[  ]]
 					}, {}),
 					f = ai.gen_spec.treesitter({ a = "@function.outer", i = "@function.inner" }, {}),
 					c = ai.gen_spec.treesitter({ a = "@class.outer", i = "@class.inner" }, {}),
@@ -243,5 +265,11 @@ return {
 			},
 		},
 		opts = { snippet_engine = "luasnip" },
+	},
+
+	-- applescript support
+	{
+		"mityu/vim-applescript",
+		lazy = false,
 	},
 }

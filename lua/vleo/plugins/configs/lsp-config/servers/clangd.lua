@@ -1,3 +1,4 @@
+local icons = Vreq("utils.config.icons").kind
 local extensions = {
 	-- defaults:
 	-- Automatically set inlay hints (type hints)
@@ -36,21 +37,21 @@ local extensions = {
 	},
 	ast = {
 		role_icons = {
-			type = "",
-			declaration = "",
-			expression = "",
-			specifier = "",
-			statement = "",
-			["template argument"] = "",
+			type = icons.TypeParameter,
+			declaration = icons.Package,
+			expression = " ",
+			specifier = icons.Value,
+			statement = " ",
+			["template argument"] = " ",
 		},
 		kind_icons = {
-			Compound = "ﴯ",
-			Recovery = "",
-			TranslationUnit = "",
-			PackExpansion = "",
-			TemplateTypeParm = "",
-			TemplateTemplateParm = "",
-			TemplateParamObject = "",
+			Compound = icons.Struct,
+			Recovery = " ",
+			TranslationUnit = " ",
+			PackExpansion = " ",
+			TemplateTypeParm = " ",
+			TemplateTemplateParm = icons.Unit,
+			TemplateParamObject = icons.Object,
 		},
 		highlights = {
 			detail = "Comment",
@@ -73,13 +74,12 @@ return function(capabilities)
 		"-Wno-unknown-warning-option",
 		"--enable-config",
 		-- NOTE only for sage
-		"--header-insertion=never",
+		"-header-insertion=never",
 	}
-
 
 	-- Have to call special function to run clangd
-	require("clangd_extensions").setup {
+	require("clangd_extensions").setup({
 		server = opts,
 		extensions = extensions,
-	}
+	})
 end

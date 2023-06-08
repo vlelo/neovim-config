@@ -8,6 +8,10 @@ return {
 	},
 
 	{
+		"ranjithshegde/ccls.nvim",
+	},
+
+	{
 		"williamboman/mason.nvim",
 		event = "VeryLazy",
 		opts = {
@@ -16,48 +20,68 @@ return {
 				height = 0.7,
 				border = "rounded",
 				icons = {
-					package_installed = "",
-					package_pending = "",
-					package_uninstalled = ""
-				}
+					package_installed = " ",
+					package_pending = " ",
+					package_uninstalled = " ",
+				},
 			},
-		}
+		},
 	},
 
-	{ "williamboman/mason-lspconfig.nvim", },
-
-	-- null-ls
+	{ "williamboman/mason-lspconfig.nvim" },
 	{
-		"jose-elias-alvarez/null-ls.nvim",
+		"jay-babu/mason-null-ls.nvim",
 		event = { "BufReadPre", "BufNewFile" },
+		dependencies = {
+			"williamboman/mason.nvim",
+			{
+				"jose-elias-alvarez/null-ls.nvim",
+				event = { "BufReadPre", "BufNewFile" },
+			},
+		},
 		config = function()
 			local nls = require("null-ls")
-			nls.setup({
+			require("mason-null-ls").setup({
+				ensure_installed = {},
+				automatic_installation = false,
+				handlers = {
+					-- function() end, -- disables automatic setup of all null-ls sources
+
+					stylua = function(source_name, methods)
+						nls.register(nls.builtins.formatting.stylua)
+					end,
+					shfmt = function(source_name, methods)
+						require("mason-null-ls").default_setup(source_name, methods) -- to maintain default behavior
+					end,
+					fixjson = function(source_name, methods)
+						nls.register(nls.builtins.formatting.fixjson.with({ filetypes = { "jsonc", "json" } }))
+					end,
+					-- nls.builtins.diagnostics.luacheck,
+					selene = function(source_name, methods)
+						nls.register(nls.builtins.diagnostics.selene.with({
+							condition = function(utils)
+								return utils.root_has_file({ "selene.toml" })
+							end,
+						}))
+					end,
+
+					flake8 = function(source_name, methods)
+						nls.register(nls.builtins.diagnostics.flake8.with({
+							extra_args = {
+								"--max-line-length=90",
+							},
+						}))
+					end,
+				},
+			})
+			nls.setup({ -- everything else not supported by mason
 				debounce = 150,
 				save_after_format = false,
 				sources = {
-					-- nls.builtins.formatting.prettierd,
-					nls.builtins.formatting.stylua,
-					nls.builtins.formatting.fish_indent,
-					-- nls.builtins.formatting.fixjson.with({ filetypes = { "jsonc" } }),
-					-- nls.builtins.formatting.eslint_d,
-					-- nls.builtins.diagnostics.shellcheck,
-					nls.builtins.formatting.shfmt,
-					nls.builtins.diagnostics.markdownlint,
-					-- nls.builtins.diagnostics.luacheck,
-					nls.builtins.formatting.prettierd.with({
-						filetypes = { "markdown" }, -- only runs `deno fmt` for markdown
-					}),
-					nls.builtins.diagnostics.selene.with({
-						condition = function(utils)
-							return utils.root_has_file({ "selene.toml" })
-						end,
-					}),
+					-- nls.builtins.formatting.fish_indent,
+					-- nls.builtins.diagnostics.mlint,
+
 					nls.builtins.code_actions.gitsigns,
-					nls.builtins.formatting.isort,
-					nls.builtins.formatting.black,
-					nls.builtins.diagnostics.flake8,
-					nls.builtins.diagnostics.mlint,
 				},
 				root_dir = require("null-ls.utils").root_pattern(".null-ls-root", ".neoconf.json", ".git", "Makefile"),
 			})

@@ -50,17 +50,18 @@ return {
 				["g`"] = "Marks",
 				["<space>"] = {
 					name = "Leader",
-					f = { name = "Telescope", },
-					s = { name = "Telescope Neovim", },
-					x = { name = "Lists", },
-					b = { name = "Buffers", },
-					w = { name = "Windows", },
+					f = { name = "Telescope" },
+					s = { name = "Telescope Neovim" },
+					x = { name = "Lists" },
+					b = { name = "Buffers" },
+					w = { name = "Windows" },
 					u = { name = "UI" },
 					c = { name = "Comment" },
 					q = { name = "Session" },
 					g = { name = "Git" },
 					t = { name = "Terminal" },
-					["<Tab>"] = { name = "Tabs", },
+					o = { name = "Orgmode" },
+					["<Tab>"] = { name = "Tabs" },
 				},
 			})
 			wk.register({
@@ -86,10 +87,10 @@ return {
 					name = "Prefix",
 					["%"] = "Delimiter",
 					s = "Leap",
-				}
+				},
 			}, {
 				mode = { "o" },
 			})
-		end
+		end,
 	},
 }

@@ -88,10 +88,14 @@ return {
 					-- "wgsl",
 					"json",
 					"markdown",
+					"dap_repl",
 				},
 				sync_install = false,
 				auto_install = false,
-				highlight = { enable = true },
+				highlight = {
+					enable = true,
+					additional_vim_regex_highlighting = { "org" },
+				},
 				indent = { enable = false },
 				context_commentstring = { enable = true, enable_autocmd = false },
 				incremental_selection = {
@@ -111,7 +115,7 @@ return {
 				playground = {
 					enable = true,
 					disable = {},
-					updatetime = 25,   -- Debounced time for highlighting nodes in the playground from source code
+					updatetime = 25, -- Debounced time for highlighting nodes in the playground from source code
 					persist_queries = true, -- Whether the query persists across vim sessions
 					keybindings = {
 						toggle_query_editor = "o",
@@ -140,7 +144,7 @@ return {
 				rainbow = {
 					enable = true,
 					extended_mode = true,
-				}
+				},
 			})
 		end,
 	},
@@ -158,7 +162,7 @@ return {
 					return "g@l"
 				end,
 				expr = true,
-				desc = "Swap next master node"
+				desc = "Swap next master node",
 			},
 			{
 				"[S",
@@ -167,7 +171,7 @@ return {
 					return "g@l"
 				end,
 				expr = true,
-				desc = "Swap previous master node"
+				desc = "Swap previous master node",
 			},
 
 			-- Swap Current Node at the Cursor with it's siblings, Dot Repeatable
@@ -178,7 +182,7 @@ return {
 					return "g@l"
 				end,
 				expr = true,
-				desc = "Swap next node"
+				desc = "Swap next node",
 			},
 			{
 				"[s",
@@ -187,7 +191,7 @@ return {
 					return "g@l"
 				end,
 				expr = true,
-				desc = "Swap previous node"
+				desc = "Swap previous node",
 			},
 		},
 	},

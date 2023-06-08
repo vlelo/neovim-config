@@ -21,9 +21,10 @@ local M = {
 					{
 						elements = {
 							-- Elements can be strings or table with id and size keys.
-							{ id = "scopes", size = 0.25 },
+							-- { id = "scopes", size = 0.25 },
 							--[[ { id = "breakpoints", size = 0.25 }, ]]
 							--[[ { id = "watches", size = 0.25 }, ]]
+							"scopes",
 							"breakpoints",
 							"watches",
 							"stacks",
@@ -66,7 +67,7 @@ local M = {
 					},
 				},
 				windows = {
-					indent = 1
+					indent = 1,
 				},
 				render = {
 					max_type_length = nil, -- Can be integer or nil.
@@ -79,6 +80,25 @@ local M = {
 		},
 		{ "jbyuki/one-small-step-for-vimkind" },
 		{ "theHamsta/nvim-dap-virtual-text" },
+		{
+			"jedrzejboczar/nvim-dap-cortex-debug",
+			config = function()
+				require("dap-cortex-debug").setup({
+					debug = true,
+					extension_path = "/Users/vleo/.vscode/extensions/maurus25.cortex-debug/extension",
+					lib_extension = nil,
+					node_path = "node",
+					dapui_rtt = true,
+					dap_vscode_filetypes = { "c", "cpp" },
+				})
+			end,
+		},
+		{
+			"LiadOz/nvim-dap-repl-highlights",
+			config = function()
+				require("nvim-dap-repl-highlights").setup()
+			end,
+		},
 	},
 }
 
@@ -136,6 +156,7 @@ function M.config()
 	Vreq("utils").load_mod("plugins.configs.dap.adapters", {
 		"nlua",
 		"lldb-vscode",
+		"cortex-debug",
 	})
 
 	local dapui = require("dapui")
@@ -149,13 +170,19 @@ function M.config()
 	-- 	dapui.close({})
 	-- end
 
-	vim.fn.sign_define("DapBreakpoint", { text = "", texthl = "DiagnosticSignError", linehl = "", numhl = "" })
-	vim.fn.sign_define("DapBreakpointCondition", { text = "", texthl = "", linehl = "", numhl = "" })
-	vim.fn.sign_define("DapLogPoint", { text = "", texthl = "DiagnosticSignInfo", linehl = "", numhl = "" })
-	vim.fn.sign_define("DapStopped",
-		{ text = "", texthl = "DiagnosticSignInfo", linehl = "DiagnosticUnderlineInfo",
-			numhl = "DiagnosticSignInfo" })
-	vim.fn.sign_define("DapBreakpointRejected", { text = "", texthl = "DiagnosticSignHint", linehl = "", numhl = "" })
+vim.fn.sign_define("DapBreakpoint", { text = " ", texthl = "DiagnosticSignError", linehl = "", numhl = "" })
+vim.fn.sign_define("DapBreakpointCondition", { text = " ", texthl = "", linehl = "", numhl = "" })
+vim.fn.sign_define("DapLogPoint", { text = ".>", texthl = "DiagnosticSignInfo", linehl = "", numhl = "" })
+vim.fn.sign_define("DapStopped", {
+text = "󰁕 ",
+texthl = "DiagnosticWarn",
+linehl = "DapStoppedLine",
+numhl = "DiagnosticSignInfo",
+})
+vim.fn.sign_define(
+"DapBreakpointRejected",
+{ text = " ", texthl = "DiagnosticError", linehl = "", numhl = "" }
+)
 
 	local keymap_restore = {}
 	dap.listeners.after["event_initialized"]["me"] = function()
@@ -168,11 +195,10 @@ function M.config()
 				end
 			end
 		end
-		vim.keymap.set(
-			'n', 'K', '<Cmd>lua require("dapui").eval()<CR>', { desc = "Dap inspect" })
+		vim.keymap.set("n", "K", '<Cmd>lua require("dapui").eval()<CR>', { desc = "Dap inspect" })
 	end
 
-	dap.listeners.after['event_terminated']['me'] = function()
+	dap.listeners.after["event_terminated"]["me"] = function()
 		for _, keymap in pairs(keymap_restore) do
 			print(vim.inspect(keymap))
 			vim.keymap.set(
@@ -186,34 +212,49 @@ function M.config()
 	end
 
 	local cmd = vim.api.nvim_create_user_command
-	cmd('Dap', function() require 'telescope'.extensions.dap.commands(
-			require 'telescope.themes'.get_dropdown({
-				previewer = false,
-			})
-		)
+	cmd("Dap", function()
+		require("telescope").extensions.dap.commands(require("telescope.themes").get_dropdown({
+			previewer = false,
+		}))
 	end, {})
-	cmd('DapFrames', function() require 'telescope'.extensions.dap.frames(
-			require 'telescope.themes'.get_dropdown({
-				-- previewer = false,
-			})
-		)
+	cmd("DapFrames", function()
+		require("telescope").extensions.dap.frames(require("telescope.themes").get_dropdown({
+			-- previewer = false,
+		}))
 	end, {})
-	cmd('DapVars', function() require 'telescope'.extensions.dap.variables(
-			require 'telescope.themes'.get_dropdown({
-				-- previewer = false,
-			})
-		)
+	cmd("DapVars", function()
+		require("telescope").extensions.dap.variables(require("telescope.themes").get_dropdown({
+			-- previewer = false,
+		}))
 	end, {})
-	cmd('DapClearBreakpoints', function() require('dap').clear_breakpoints() end, {})
-	cmd('DapShowLog', 'split | e ' .. vim.fn.stdpath('cache') .. '/dap.log | normal! G', {})
-	cmd('DapContinue', function() require('dap').continue() end, { nargs = 0 })
-	cmd('DapToggleBreakpoint', function() require('dap').toggle_breakpoint() end, { nargs = 0 })
-	cmd('DapToggleRepl', function() require('dap.repl').toggle() end, { nargs = 0 })
-	cmd('DapStepOver', function() require('dap').step_over() end, { nargs = 0 })
-	cmd('DapStepInto', function() require('dap').step_into() end, { nargs = 0 })
-	cmd('DapStepOut', function() require('dap').step_out() end, { nargs = 0 })
-	cmd('DapTerminate', function() require('dap').terminate() end, { nargs = 0 })
-	cmd('DapRestartFrame', function() require('dap').restart_frame() end, { nargs = 0 })
+	cmd("DapClearBreakpoints", function()
+		require("dap").clear_breakpoints()
+	end, {})
+	cmd("DapShowLog", "split | e " .. vim.fn.stdpath("cache") .. "/dap.log | normal! G", {})
+	cmd("DapContinue", function()
+		require("dap").continue()
+	end, { nargs = 0 })
+	cmd("DapToggleBreakpoint", function()
+		require("dap").toggle_breakpoint()
+	end, { nargs = 0 })
+	cmd("DapToggleRepl", function()
+		require("dap.repl").toggle()
+	end, { nargs = 0 })
+	cmd("DapStepOver", function()
+		require("dap").step_over()
+	end, { nargs = 0 })
+	cmd("DapStepInto", function()
+		require("dap").step_into()
+	end, { nargs = 0 })
+	cmd("DapStepOut", function()
+		require("dap").step_out()
+	end, { nargs = 0 })
+	cmd("DapTerminate", function()
+		require("dap").terminate()
+	end, { nargs = 0 })
+	cmd("DapRestartFrame", function()
+		require("dap").restart_frame()
+	end, { nargs = 0 })
 end
 
 return M

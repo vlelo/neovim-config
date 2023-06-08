@@ -24,7 +24,7 @@ local M = {
 			dependencies = { "nvim-lua/plenary.nvim" },
 			opts = {
 				remotes = { "upstream", "origin", "github" },
-			}
+			},
 		},
 		"davidsierradz/cmp-conventionalcommits",
 		{ "rcarriga/cmp-dap", dependencies = { "mfussenegger/nvim-dap" } },
@@ -52,62 +52,58 @@ M.config = function(_, _)
 			["<C-d>"] = cmp.mapping(cmp.mapping.scroll_docs(1)),
 			["<C-b>"] = cmp.mapping.scroll_docs(-4),
 			["<C-f>"] = cmp.mapping.scroll_docs(4),
-			["<C-Space>"] = function() cmp.complete() end,
+			["<C-Space>"] = function()
+				cmp.complete()
+			end,
 			--[[ ["<C-Space>"] = cmp.mapping(cmp.mapping.complete(), { "i", "c" }), ]]
-			["<C-c>"] = cmp.mapping {
+			["<C-c>"] = cmp.mapping({
 				i = cmp.mapping.abort(),
 				c = cmp.mapping.close(),
-			},
+			}),
 			["<C-e>"] = cmp.mapping.abort(),
 			["<CR>"] = cmp.mapping.confirm({ select = true }),
 			--[[ ["<CR>"] = cmp.mapping.confirm { ]]
 			--[[	behavior = cmp.ConfirmBehavior.Insert, ]]
 			--[[	select = false ]]
 			--[[ }, ]]
-			["<C-k>"] = cmp.mapping.confirm {
+			["<C-k>"] = cmp.mapping.confirm({
 				behavior = cmp.ConfirmBehavior.Insert,
-				select = true
-			},
+				select = true,
+			}),
 			["<C-p>"] = cmp.mapping.select_prev_item(),
 			["<C-n>"] = cmp.mapping.select_next_item(),
 		}),
-		sources = cmp.config.sources(
+		sources = cmp.config.sources({
+			{ name = "nvim_lsp" },
+			{ name = "luasnip" },
+		}, {
+			{ name = "path" },
+			-- { name = 'fuzzy_path' },
+			{ name = "buffer" },
+			-- { name = 'fuzzy_buffer' },
+		}, { { name = "git" } }, {
 			{
-				{ name = "nvim_lsp" },
-				{ name = "luasnip" },
-			},
-			{
-				{ name = "path" },
-				-- { name = 'fuzzy_path' },
-				{ name = "buffer" },
-				-- { name = 'fuzzy_buffer' },
-			},
-			{ { name = "git" } },
-			{
-				{
-					name = "spell",
-					option = {
-						keep_all_entries = false,
-						enable_in_context = function()
-							return require('cmp.config.context').in_treesitter_capture('spell')
-						end,
-						is_available = function()
-							return require('cmp.config.context').in_treesitter_capture('spell')
-						end,
-					},
-				}
-			},
-			{
-				{
-					name = "latex_symbols",
-					filetype = { "tex", "latex" },
-					option = { cache = true }, -- avoids reloading each time
+				name = "spell",
+				option = {
+					keep_all_entries = false,
+					enable_in_context = function()
+						return require("cmp.config.context").in_treesitter_capture("spell")
+					end,
+					is_available = function()
+						return require("cmp.config.context").in_treesitter_capture("spell")
+					end,
 				},
-			}
-		),
+			},
+		}, {
+			{
+				name = "latex_symbols",
+				filetype = { "tex", "latex" },
+				option = { cache = true }, -- avoids reloading each time
+			},
+		}),
 		formatting = {
 			format = function(_, item)
-				local icons = Vreq("utils.config.icons").kinds
+				local icons = Vreq("utils.config.icons").kind
 				if icons[item.kind] then
 					item.kind = icons[item.kind] .. item.kind
 				end
@@ -140,15 +136,15 @@ M.config = function(_, _)
 
 		enabled = function()
 			-- disable completion in comments
-			local context = require 'cmp.config.context'
+			local context = require("cmp.config.context")
 			-- keep command mode completion enabled when cursor is in a comment
-			if vim.api.nvim_get_mode().mode == 'c' then
+			if vim.api.nvim_get_mode().mode == "c" then
 				return true
 			else
 				return not context.in_treesitter_capture("comment")
 						and not context.in_syntax_group("Comment")
 						and vim.api.nvim_buf_get_option(0, "buftype") ~= "prompt"
-						or require("cmp_dap").is_dap_buffer()
+					or require("cmp_dap").is_dap_buffer()
 			end
 		end,
 		--[[ enabled = function() ]]
@@ -163,11 +159,11 @@ M.config = function(_, _)
 				c = function()
 					cmp.confirm({
 						behavior = cmp.ConfirmBehavior.Insert,
-						select = true
+						select = true,
 					})
 					cmp.complete()
 				end,
-			}
+			},
 		}),
 		confirm_opts = {
 			behavior = cmp.ConfirmBehavior.Insert,
@@ -177,7 +173,7 @@ M.config = function(_, _)
 			{ { name = "path" } },
 			-- { { name = 'fuzzy_path' } },
 			{ { name = "cmdline" } }
-		)
+		),
 	})
 
 	cmp.setup.cmdline({ "/", "?" }, {
@@ -185,8 +181,8 @@ M.config = function(_, _)
 		sources = cmp.config.sources(
 			{ { name = "nvim_lsp_document_symbol" } },
 			{ { name = "buffer" } }
-		-- { { name = 'fuzzy_buffer' } }
-		)
+			-- { { name = 'fuzzy_buffer' } }
+		),
 	})
 
 	cmp.setup.filetype("gitcommit", {
@@ -194,20 +190,16 @@ M.config = function(_, _)
 			{ { name = "conventionalcommits" } },
 			{ { name = "git" } },
 			{ { name = "buffer" } }
-		-- { { name = 'fuzzy_buffer' } }
+			-- { { name = 'fuzzy_buffer' } }
 		),
 	})
 
 	cmp.setup.filetype("query", {
-		sources = cmp.config.sources(
-			{ { name = "omni" } }
-		)
+		sources = cmp.config.sources({ { name = "omni" } }),
 	})
 
 	cmp.setup.filetype({ "dap-repl", "dapui_watches", "dapui_hover" }, {
-		sources = cmp.config.sources(
-			{ { name = "dap" } }
-		)
+		sources = cmp.config.sources({ { name = "dap" } }),
 	})
 
 	---@diagnostic disable-next-line: missing-parameter

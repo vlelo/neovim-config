@@ -27,7 +27,7 @@ return {
 			local nwi = require("nvim-web-devicons")
 			nwi.setup(opts)
 
-			nwi.set_default_icon('', '#6d8086')
+			nwi.set_default_icon("", "#6d8086")
 
 			nwi.set_icon({
 				md = {
@@ -101,29 +101,28 @@ return {
 			Vreq("utils.keys").wk_defer({
 				["<leader>bc"] = {
 					name = "Close",
-					[']'] = { "<cmd>BufferLineCloseRight<CR>", "Close Right" },
-					['['] = { "<cmd>BufferLineCloseLeft<CR>", "Close Left" },
+					["]"] = { "<cmd>BufferLineCloseRight<CR>", "Close Right" },
+					["["] = { "<cmd>BufferLineCloseLeft<CR>", "Close Left" },
 					c = { "<cmd>Bdelete<CR>", "Close Current" },
 				},
 				["<leader>"] = {
-					['1'] = { "<cmd>BufferLineGoToBuffer 1<CR>", "which_key_ignore" },
-					['2'] = { "<cmd>BufferLineGoToBuffer 2<CR>", "which_key_ignore" },
-					['3'] = { "<cmd>BufferLineGoToBuffer 3<CR>", "which_key_ignore" },
-					['4'] = { "<cmd>BufferLineGoToBuffer 4<CR>", "which_key_ignore" },
-					['5'] = { "<cmd>BufferLineGoToBuffer 5<CR>", "which_key_ignore" },
-					['6'] = { "<cmd>BufferLineGoToBuffer 6<CR>", "which_key_ignore" },
-					['7'] = { "<cmd>BufferLineGoToBuffer 7<CR>", "which_key_ignore" },
-					['8'] = { "<cmd>BufferLineGoToBuffer 8<CR>", "which_key_ignore" },
-					['9'] = { "<cmd>BufferLineGoToBuffer 9<CR>", "which_key_ignore" },
+					["1"] = { "<cmd>BufferLineGoToBuffer 1<CR>", "which_key_ignore" },
+					["2"] = { "<cmd>BufferLineGoToBuffer 2<CR>", "which_key_ignore" },
+					["3"] = { "<cmd>BufferLineGoToBuffer 3<CR>", "which_key_ignore" },
+					["4"] = { "<cmd>BufferLineGoToBuffer 4<CR>", "which_key_ignore" },
+					["5"] = { "<cmd>BufferLineGoToBuffer 5<CR>", "which_key_ignore" },
+					["6"] = { "<cmd>BufferLineGoToBuffer 6<CR>", "which_key_ignore" },
+					["7"] = { "<cmd>BufferLineGoToBuffer 7<CR>", "which_key_ignore" },
+					["8"] = { "<cmd>BufferLineGoToBuffer 8<CR>", "which_key_ignore" },
+					["9"] = { "<cmd>BufferLineGoToBuffer 9<CR>", "which_key_ignore" },
 				},
 			})
 		end,
 		opts = {
 			options = {
-				color_icons = true,          -- whether or not to add the filetype icon highlights
-				show_buffer_icons = true,    -- disable filetype icons for buffers
+				color_icons = true, -- whether or not to add the filetype icon highlights
+				show_buffer_icons = true, -- disable filetype icons for buffers
 				show_buffer_close_icons = true,
-				show_buffer_default_icon = true, -- whether or not an unrecognised filetype should show a default icon
 				show_close_icon = false,
 				show_tab_indicators = true,
 				persist_buffer_sort = true, -- whether or not custom sorted buffers should persist
@@ -132,17 +131,17 @@ return {
 				enforce_regular_tabs = false,
 				always_show_bufferline = true,
 				sort_by = "insert_after_current",
-				close_command = "Bdelete %d",   -- can be a string | function, see "Mouse actions"
+				close_command = "Bdelete %d", -- can be a string | function, see "Mouse actions"
 				right_mouse_command = "Bdelete %d", -- can be a string | function, see "Mouse actions"
 				indicator = {
-					icon = '▎',
-					style = 'icon',
+					icon = "▎",
+					style = "icon",
 				},
 				diagnostics = "nvim_lsp",
 				diagnostics_indicator = function(_, _, diag)
 					local icons = Vreq("utils.config.icons").diagnostics
 					local ret = (diag.error and icons.Error .. diag.error .. " " or "")
-							.. (diag.warning and icons.Warn .. diag.warning or "")
+						.. (diag.warning and icons.Warn .. diag.warning or "")
 					return vim.trim(ret)
 				end,
 				offsets = {
@@ -165,7 +164,10 @@ return {
 				},
 				---@diagnostic disable-next-line: unused-local
 				custom_filter = function(buf_number, buf_numbers)
-					return not Vreq("utils.lua").has_value(Vreq("utils.config.disabled").ft, vim.bo[buf_number].filetype)
+					return not Vreq("utils.lua").has_value(
+						Vreq("utils.config.disabled").ft,
+						vim.bo[buf_number].filetype
+					)
 				end,
 				custom_areas = {
 					right = function()
@@ -175,25 +177,26 @@ return {
 						local warning = #vim.diagnostic.get(0, { severity = seve.WARN })
 						local info = #vim.diagnostic.get(0, { severity = seve.INFO })
 						local hint = #vim.diagnostic.get(0, { severity = seve.HINT })
+						local icons = Vreq("utils.config.icons").diagnostics
 
 						if error ~= 0 then
-							table.insert(result, { text = "  " .. error, guifg = "#EC5241" })
+							table.insert(result, { text = icons.Error .. error, guifg = "#EC5241" })
 						end
 
 						if warning ~= 0 then
-							table.insert(result, { text = "  " .. warning, guifg = "#EFB839" })
+							table.insert(result, { text = icons.Warn .. warning, guifg = "#EFB839" })
 						end
 
 						if hint ~= 0 then
-							table.insert(result, { text = "  " .. hint, guifg = "#A3BA5E" })
+							table.insert(result, { text = icons.Hint .. hint, guifg = "#A3BA5E" })
 						end
 
 						if info ~= 0 then
-							table.insert(result, { text = "  " .. info, guifg = "#7EA9A7" })
+							table.insert(result, { text = icons.Info .. info, guifg = "#7EA9A7" })
 						end
 						return result
 					end,
-				}
+				},
 			},
 		},
 	},
@@ -237,7 +240,7 @@ return {
 				ft_ignore = Vreq("utils.config.disabled").ft,
 				bt_ignore = Vreq("utils.config.disabled").bt,
 			})
-		end
+		end,
 	},
 
 	-- better vim.notify
@@ -255,7 +258,7 @@ return {
 				"<leader>sn",
 				"<cmd>Telescope notify theme=dropdown<cr>",
 				desc = "Notifications",
-			}
+			},
 		},
 		opts = {
 			timeout = 3000,
@@ -307,10 +310,17 @@ return {
 					dashboard.button("n", " " .. " New file", "<cmd>ene<CR>"),
 					dashboard.button("f", " " .. " Find file", "<cmd>Telescope find_files <CR>"),
 					dashboard.button("r", " " .. " Recent files", "<cmd>Telescope oldfiles <CR>"),
-					dashboard.button("g", " " .. " Find text", "<cmd>Telescope live_grep <CR>"),
-					dashboard.button("p", " " .. " Find project",
-						":Lazy load workspaces.nvim | Telescope workspaces <CR>"),
-					dashboard.button("b", " " .. " Restore Session", [[<cmd>lua require("persistence").load() <cr>]]),
+					dashboard.button("g", "󰙩 " .. " Find text", "<cmd>Telescope live_grep <CR>"),
+					dashboard.button(
+						"p",
+						" " .. " Find project",
+						":Lazy load workspaces.nvim | Telescope workspaces <CR>"
+					),
+					dashboard.button(
+						"b",
+						" " .. " Restore Session",
+						[[<cmd>lua require("persistence").load() <cr>]]
+					),
 				}),
 				make_group({
 					dashboard.button("d", " " .. " Neorg", "<cmd>Neorg index<cr>"),
@@ -319,7 +329,7 @@ return {
 					dashboard.button("s", " " .. " Config", "<cmd>e $MYVIMRC | cd %:p:h<CR>"),
 					-- dashboard.button("l", "痢" .. " Lazy", "<cmd>Lazy<CR>"),
 					dashboard.button("l", " " .. " Lazy", "<cmd>Lazy<CR>"),
-					dashboard.button("q", " " .. " Quit", "<cmd>qa<CR>"),
+					dashboard.button("q", "󰅚 " .. " Quit", "<cmd>qa<CR>"),
 				}),
 				make_padding(1),
 			}
@@ -417,9 +427,10 @@ return {
 		event = "VeryLazy",
 		config = function()
 			local baleia = require("baleia").setup()
-			vim.api.nvim_create_user_command("Baleia", function() baleia.once(0) end,
-				{ desc = "Colorize ansi scnacodes" })
-		end
+			vim.api.nvim_create_user_command("Baleia", function()
+				baleia.once(0)
+			end, { desc = "Colorize ansi scnacodes" })
+		end,
 	},
 
 	-- references
@@ -455,7 +466,7 @@ return {
 		dependencies = "winston0410/cmd-parser.nvim",
 		config = function(_, _)
 			require("range-highlight").setup()
-		end
+		end,
 	},
 
 	{
@@ -476,14 +487,14 @@ return {
 		"kevinhwang91/nvim-ufo",
 		event = "VeryLazy",
 		dependencies = {
-			"kevinhwang91/promise-async"
+			"kevinhwang91/promise-async",
 		},
 		opts = function()
 			local handler = function(virtText, lnum, endLnum, width, truncate)
 				local newVirtText = {}
 				local nlines = endLnum - lnum
 				local percent_lines = math.ceil((nlines / vim.api.nvim_buf_line_count(0)) * 100)
-				local suffix = ('┤ %d : %d%% ├'):format(nlines, percent_lines) .. string.rep("─", 3)
+				local suffix = ("┤ %d : %d%% ├"):format(nlines, percent_lines) .. string.rep("─", 3)
 				local sufWidth = vim.fn.strdisplaywidth(suffix)
 
 				local targetWidth = width - sufWidth
@@ -502,7 +513,7 @@ return {
 						chunkWidth = vim.fn.strdisplaywidth(chunkText)
 						-- str width returned from truncate() may less than 2nd argument, need padding
 						if curWidth + chunkWidth < targetWidth then
-							suffix = suffix .. (' '):rep(targetWidth - curWidth - chunkWidth)
+							suffix = suffix .. (" "):rep(targetWidth - curWidth - chunkWidth)
 						end
 						break
 					end
@@ -520,10 +531,10 @@ return {
 		end,
 		config = function(_, opts)
 			require("ufo").setup(opts)
-			vim.keymap.set('n', 'zR', require('ufo').openAllFolds, { desc = "Open all folds" })
-			vim.keymap.set('n', 'zM', require('ufo').closeAllFolds, { desc = "Close all folds" })
-			vim.keymap.set('n', 'zr', require('ufo').openFoldsExceptKinds, { desc = "Open folds" })
-			vim.keymap.set('n', 'zm', require('ufo').closeFoldsWith, { desc = "Close folds" })
-		end
+			vim.keymap.set("n", "zR", require("ufo").openAllFolds, { desc = "Open all folds" })
+			vim.keymap.set("n", "zM", require("ufo").closeAllFolds, { desc = "Close all folds" })
+			vim.keymap.set("n", "zr", require("ufo").openFoldsExceptKinds, { desc = "Open folds" })
+			vim.keymap.set("n", "zm", require("ufo").closeFoldsWith, { desc = "Close folds" })
+		end,
 	},
 }

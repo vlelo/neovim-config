@@ -46,7 +46,26 @@ return {
 					["Z"] = "expand_all_nodes",
 					["/"] = "noop",
 					["<c-f>"] = "fuzzy_finder",
-				}
+					["O"] = "system_open",
+					["<c-y>"] = "name_copy",
+				},
+			},
+			commands = {
+				system_open = function(state)
+					local node = state.tree:get_node()
+					local path = node:get_id()
+					-- macOs: open file in default application in the background.
+					-- Probably you need to adapt the Linux recipe for manage path with spaces. I don't have a mac to try.
+					vim.api.nvim_command("silent !open -g " .. path)
+					-- Linux: open file in default application
+					-- vim.api.nvim_command(string.format("silent !xdg-open '%s'", path))
+				end,
+				name_copy = function(state)
+					local node = state.tree:get_node()
+					local path = node:get_id()
+					path = vim.fn.fnamemodify(path, ":t")
+					vim.fn.setreg("@", path)
+				end,
 			},
 		},
 	},
@@ -55,7 +74,7 @@ return {
 		-- only needed if you want to use the commands with "_with_window_picker" suffix
 		"s1n7ax/nvim-window-picker",
 		config = function(_, _)
-			require "window-picker".setup({
+			require("window-picker").setup({
 				autoselect_one = true,
 				include_current = false,
 				filter_rules = {
@@ -64,7 +83,7 @@ return {
 						buftype = disabled.bt,
 					},
 				},
-				other_win_hl_color = '#e35e4f',
+				other_win_hl_color = "#e35e4f",
 			})
 		end,
 	},
@@ -120,7 +139,7 @@ return {
 		},
 		init = function()
 			Vreq("utils.keys").wk_defer({ ["<leader>gh"] = { name = "Gitsigns" } })
-		end
+		end,
 	},
 
 	{
@@ -154,8 +173,8 @@ return {
 				Struct = { icon = "𝓢", hl = "@type" },
 				Event = { icon = "🗲", hl = "@type" },
 				Operator = { icon = "+", hl = "@operator" },
-				TypeParameter = { icon = "𝙏", hl = "@parameter" }
-			}
+				TypeParameter = { icon = "𝙏", hl = "@parameter" },
+			},
 		},
 	},
 
@@ -167,7 +186,7 @@ return {
 		},
 		keys = {
 			{ "<leader>xx", "<cmd>TroubleToggle<CR>", desc = "Trouble" },
-		}
+		},
 	},
 
 	{
@@ -179,7 +198,7 @@ return {
 		},
 		config = function(_, opts)
 			require("docs-view").setup(opts)
-		end
+		end,
 	},
 
 	-- job handling
@@ -193,8 +212,8 @@ return {
 			},
 		},
 		config = function(_, opts)
-			require('overseer').setup(opts)
-		end
+			require("overseer").setup(opts)
+		end,
 	},
 
 	-- better quickfix
@@ -202,5 +221,4 @@ return {
 		"kevinhwang91/nvim-bqf",
 		ft = "qf",
 	},
-
 }
